@@ -1,12 +1,12 @@
 DHT11
 
-VCC	->	3v3	(red)
+VCC		->	3v3		(red)
 GND	->	GND	(black)
-DATA	->	G4	(brown)
+DATA	->	G0		(brown)
 
 MQ-2
 
-VCC	->	5v	(red)
+VCC		->	5v		(red)
 GND	->	GND	(black)
-DO	->	G2	(orange)
-AO	->	G0	(yellow)
+AO		->	G34		(orange)
+DO		->	G35		(yellow)
