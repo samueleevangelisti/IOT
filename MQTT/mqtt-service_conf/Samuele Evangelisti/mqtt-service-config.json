@@ -1,0 +1,6 @@
+{
+  "server": "192.168.1.2",
+  "topic": "sensor/#",
+  "user": "IoT",
+  "password": "IoT"
+}
