@@ -1,7 +1,3 @@
-#include <WiFi.h>
-#include <PubSubClient.h>
-#include <DHT.h>
-
 #include "Globals.h"
 #include "WifiUtils.h"
 #include "MqttUtils.h"
@@ -9,6 +5,7 @@
 #include "Mq2Utils.h"
 
 void setup() {
+  Serial.println("==================================================");
   pinMode(PIN_MQ2_DO, INPUT);
   Serial.begin(115200);
   wifi_connect();

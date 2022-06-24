@@ -1,9 +1,9 @@
 #ifndef MQTTUTILS_H
 #define MQTTUTILS_H
 
-WiFiClient wifi_client;
+#include <PubSubClient.h>
 
-char* MQTT_SERVER = "127.0.0.1"; // ip del server mqtt
+char* MQTT_SERVER = "192.168.1.2"; // ip del server mqtt
 char* MQTT_USER = "IoT"; // user per mqtt
 char* MQTT_PASSWORD = "IoT"; // password per mqtt
 char* TOPIC_RSSI = "sensor/rssi"; // topic della temperatura
@@ -33,6 +33,7 @@ void mqtt_connect() {
   }
 }
 
+// core per le funzioni di pubblicazione
 void mqtt_publish_core(char* topic, const char* payload) {
   Serial.print("MQTT -> ");
   mqtt_publish_result = mqtt.publish(topic, payload);

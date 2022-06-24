@@ -1,6 +1,8 @@
 #ifndef DHT11UTILS_H
 #define DHT11UTILS_H
 
+#include <DHT.h>
+
 DHT dht11(PIN_DHT11, DHT11);
 
 // inizializzazione del sensore DHT11

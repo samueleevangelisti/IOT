@@ -1,7 +1,11 @@
 #ifndef WIFIUTILS_H
 #define WIFIUTILS_H
 
+#include <WiFi.h>
+
 #include "WifiAuth.h"
+
+WiFiClient wifi_client;
 
 // connessione alla rete WiFi
 void wifi_connect() {
