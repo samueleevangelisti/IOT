@@ -1,3 +1,4 @@
 ESP32/firmware/WifiAuth.h
+ESP32/firmware/MqttAuth.h
 
 MQTT/mqtt-service-config.json

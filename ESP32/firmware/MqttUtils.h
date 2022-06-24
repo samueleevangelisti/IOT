@@ -3,7 +3,8 @@
 
 #include <PubSubClient.h>
 
-char* MQTT_SERVER = "192.168.1.2"; // ip del server mqtt
+#include "MqttAuth.h"
+
 char* MQTT_USER = "IoT"; // user per mqtt
 char* MQTT_PASSWORD = "IoT"; // password per mqtt
 char* TOPIC_RSSI = "sensor/rssi"; // topic della temperatura
