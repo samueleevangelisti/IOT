@@ -1,0 +1,9 @@
+{
+  "url": "http://localhost:8086",
+  "token": "URCbPPWYX6rl5KDvRVMfLFilMzEUvcGtOesPblLPTuUSt3PXIUkYDYUgVqKLhgrrf9Xhl52mkSwYKALf6OSxYw==",
+  "organization": "IoT",
+  "bucket": {
+    "sensor": "IoT-sensor",
+    "weather": "IoT-weather"
+  }
+}

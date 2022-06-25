@@ -1,4 +1,11 @@
+ESP32/firmware/GlobalsAuth.h
 ESP32/firmware/WifiAuth.h
 ESP32/firmware/MqttAuth.h
 
 MQTT/mqtt-service-config.json
+
+Weather/weather-service-config.json
+
+Influx/influx-config.json
+
+Services/__pycache__
