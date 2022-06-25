@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from pytz import timezone
 from meteostat import Stations, Hourly
 from time import sleep, gmtime
-import time
 import atexit
 
 f = open(path.abspath(path.join(path.dirname(__file__), '../Weather/weather-service-config.json')), 'r')
