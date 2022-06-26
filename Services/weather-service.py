@@ -5,21 +5,18 @@ from pytz import timezone
 from meteostat import Stations, Hourly
 from time import sleep, gmtime
 import atexit
+from weatherdatabase import WeatherDatabase
 
 f = open(path.abspath(path.join(path.dirname(__file__), '../Weather/weather-service-config.json')), 'r')
 config = json.load(f)
 f.close()
-f = open(path.abspath(path.join(path.dirname(__file__), '../Weather/weather-service-database.json')), 'r')
-database = json.load(f)
-f.close()
+
+weather_database = WeatherDatabase()
 
 def on_close():
   last_datetime = datetime.now()
-  print(last_datetime)
-  database['datetime'] = last_datetime.isoformat()
-  f = open(path.abspath(path.join(path.dirname(__file__), '../Weather/weather-service-database.json')), 'w')
-  f.write(json.dumps(database, indent=2))
-  f.close()
+  print('[LOG ] last datetime: {}'.format(last_datetime))
+  weather_database.store(config['latitude'], config['longitude'], last_datetime)
 
 atexit.register(on_close)
 
@@ -46,7 +43,9 @@ print('[LOG ] locale/station timedelta: {}'.format(locale_station_timedelta))
 end_datetime = locale_datetime + locale_station_timedelta
 print('[LOG ] end datetime: {}'.format(end_datetime))
 # data di ultimo funzionamento
-last_datetime = datetime.fromisoformat(database['datetime'])
+last_datetime = weather_database.retrieve(config['latitude'], config['longitude'])
+if last_datetime == None:
+  last_datetime = datetime(1970, 1, 1)
 print('[LOG ] last datetime: {}'.format(last_datetime))
 # tempo passata dall'ultimo rilevamento
 end_last_timedelta = end_datetime - last_datetime
