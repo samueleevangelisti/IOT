@@ -13,13 +13,18 @@ class Influx:
     self.query_api = self.client.query_api()
 
   def write(self, bucket_str, record):
-    self.write_api.write(bucket=self.config['bucket'][bucket_str], org=self.config['organization'], record=record)
+    print('INFLUX -> [WAIT] write')
+    try:
+      self.write_api.write(bucket=self.config['bucket'][bucket_str], org=self.config['organization'], record=record)
+      print('INFLUX -> [OK  ] write')
+      return True
+    except:
+      print('INFLUX -> [ERR ] write')
+      return False
 
   def write_sensor(self, data_dict):
-    print('INFLUX -> [WAIT] write sensor data')
-    self.write('sensor', data_dict)
-    print('INFLUX -> [OK  ] write sensor data')
+    return self.write('sensor', data_dict)
   
-  def write_weather(self, temperature):
-    self.write('weather', Point('weather').tag('tag', 'tag').field('value', temperature))
+  def write_weather(self, data_dict):
+    return self.write('weather', data_dict)
     
