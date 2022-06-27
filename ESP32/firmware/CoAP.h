@@ -2,20 +2,22 @@
 #include <ArduinoJson.h>
 //Include Thing.CoAP
 #include "Thing.CoAP.h"
-const int capacity = JSON_OBJECT_SIZE(192); // capacity size 
-StaticJsonDocument<capacity> doc; // Json for data communication
-char buffer_ff[sizeof(doc)]; // buffer for JSON message for CoAP and MQTT payload
-//[RECOMMENDED] Alternatively, if you are NOT using Arduino IDE you can include each file you need as bellow: 
-//#include "Thing.CoAP/Server.h"
-//#include "Thing.CoAP/ESP/UDPPacketProvider.h"
 
 //Declare our CoAP server and the packet handler
 Thing::CoAP::Server server;
 Thing::CoAP::ESP::UDPPacketProvider udpProvider;
 
+
+//----------------------DA FIXARE------------------------------------
 //Change here your WiFi settings
 char* ssid = "FASTWEB-D8119D";
 char* password = "T9E47NCWMZ";
+//-------------------------------------------------------------------
+
+//Creation of json 
+const int capacity = JSON_OBJECT_SIZE(192); 
+StaticJsonDocument<capacity> doc; // Json 
+char buffer_ff[sizeof(doc)]; // buffer for Json message
 
 
 void coap_setup() {
@@ -48,7 +50,7 @@ void coap_setup() {
       + String("}")
     + String("}");
 
-
+//set json data
   doc["id"] = ESP32_ID;
   doc["gps"]["lat"] = ESP32_LATITUDE;
   doc["gps"]["lng"] = ESP32_LONGITUDE;
@@ -58,8 +60,9 @@ void coap_setup() {
   doc["gasv"]["gas"] = mq2_gas_ppm;
   doc["gasv"]["AQI"] = mq2_aqi;
 
-  serializeJson(doc, buffer_ff);
+  serializeJson(doc, buffer_ff); //Json serialization
   Serial.println(buffer_ff);
+  
       return Thing::CoAP::Status::Content(json.c_str());
     });
     
