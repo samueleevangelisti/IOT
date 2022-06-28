@@ -12,19 +12,13 @@ class Influx:
     self.write_api = self.client.write_api(write_options=SYNCHRONOUS)
     self.query_api = self.client.query_api()
 
-  def write(self, bucket_str, record):
-    print('INFLUX -> [WAIT] write')
+  def write_weather(self, point_dict):
+    print('INFLUX -> [WAIT] write weather')
     try:
-      self.write_api.write(bucket=self.config['bucket'][bucket_str], org=self.config['organization'], record=record)
-      print('INFLUX -> [OK  ] write')
+      self.write_api.write(bucket=self.config['bucket']['weather'], org=self.config['organization'], record=point_dict)
+      print('INFLUX -> [OK  ] write weather')
       return True
     except:
-      print('INFLUX -> [ERR ] write')
+      print('INFLUX -> [ERR ] write weather')
       return False
-
-  def write_sensor(self, data_dict):
-    return self.write('sensor', data_dict)
-  
-  def write_weather(self, data_dict):
-    return self.write('weather', data_dict)
     

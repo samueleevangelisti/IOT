@@ -43,7 +43,7 @@ while True:
   print('[LOG ] hourly')
   print(hourly)
   # salvataggio rilevazione attuale
-  data_dict = dict({
+  point_dict = dict({
     'measurement': 'weather',
     'tags': dict({
       'latitude': config['latitude'],
@@ -53,7 +53,7 @@ while True:
       'temperature': hourly['temp'][0]
     })
   })
-  influx.write_weather(data_dict)
+  influx.write_weather(point_dict)
   # impostazione del timer al prossimo risveglio
   alarm_datetime = datetime.now().replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
   print('[LOG ] alarm: {}'.format(alarm_datetime))
