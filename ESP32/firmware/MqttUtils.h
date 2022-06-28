@@ -37,22 +37,7 @@ void mqtt_publish() {
     mqtt_connect();
   }
   if(mqtt_connected) {
-    String json = String("{")
-      + String("\"measurement\":\"sensor\",")
-      + String("\"tags\":{")
-        + String("\"id\":\"") + String(ESP32_ID) + String("\",")
-        + String("\"latitude\":") + String(ESP32_LATITUDE, 6) + String(",")
-        + String("\"longitude\":") + String(ESP32_LONGITUDE, 6)
-      + String("},")
-      + String("\"fields\":{")
-        + String("\"rssi\":") + String(wifi_rssi) + String(",")
-        + String("\"temperature\":") + String(dht11_temperature) + String(",")
-        + String("\"humidity\":") + String(dht11_humidity) + String(",")
-        + String("\"gas\":") + String(mq2_gas_ppm) + String(",")
-        + String("\"aqi\":") + String(mq2_aqi)
-      + String("}")
-    + String("}");
-    mqtt_publish_result = mqtt.publish(MQTT_TOPIC, json.c_str());
+    mqtt_publish_result = mqtt.publish(MQTT_TOPIC, json_get_data_json_string().c_str());
     mqtt.loop();
     if(mqtt_publish_result) {
       Serial.println("MQTT  -> [OK  ] data sent to broker");

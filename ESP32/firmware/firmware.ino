@@ -1,12 +1,17 @@
 #include <WiFi.h>
+#include <ArduinoJson.h>
 #include <PubSubClient.h>
+#include <WebServer.h>
+#include <HTTPClient.h>
 #include <DHT.h>
 
 #include "Globals.h"
 #include "GlobalsAuth.h"
 #include "WifiUtils.h"
+#include "Json.h"
 #include "MqttUtils.h"
 //#include "CoAP.h"
+#include "Http.h"
 #include "Communication.h"
 #include "Dht11Utils.h"
 #include "Mq2Utils.h"

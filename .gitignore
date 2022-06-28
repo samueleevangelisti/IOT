@@ -4,6 +4,8 @@ ESP32/firmware/MqttAuth.h
 
 MQTT/mqtt-service-config.json
 
+HTTP/http-service-config.json
+
 Weather/weather-service-config.json
 
 Influx/influx-config.json

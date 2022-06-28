@@ -7,6 +7,7 @@ int communication_protocol = 0; // protocollo di comunicazione, 0: MQTT, 1: COAP
 void communication_init() {
   mqtt_init();
   mqtt_connect();
+  http_init();
 }
 
 // invio dei dati
@@ -18,6 +19,7 @@ void communication_send() {
     case 1:
       break;
     case 2:
+      http_send();
       break;
   }
 }
