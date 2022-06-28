@@ -17,8 +17,6 @@ class Influx:
     try:
       self.write_api.write(bucket=self.config['bucket']['weather'], org=self.config['organization'], record=point_dict)
       print('INFLUX -> [OK  ] write weather')
-      return True
     except:
       print('INFLUX -> [ERR ] write weather')
-      return False
     

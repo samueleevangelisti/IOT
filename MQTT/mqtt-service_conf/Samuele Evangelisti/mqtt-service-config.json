@@ -1,6 +1,7 @@
 {
-  "server": "127.0.0.1",
-  "topic": "sensor/#",
+  "url": "mqtt://127.0.0.1",
   "user": "IoT",
-  "password": "IoT"
+  "password": "IoT",
+  "id": "mqtt_service_eva",
+  "topic": "sensor/#"
 }
