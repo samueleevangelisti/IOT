@@ -9,3 +9,5 @@ Weather/weather-service-config.json
 Influx/influx-config.json
 
 Services/__pycache__
+Services/node_modules
+Services/package-lock.json

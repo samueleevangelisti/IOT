@@ -9,6 +9,7 @@
 int SAMPLE_FREQUENCY = 2000; // frequenza di campionamento. DHT11 sampling rate is 1HZ.
 int MIN_GAS_VALUE = 200; // valore minimo del gas
 int MAX_GAS_VALUE = 10000; // valore massimo del gas
+int communication_protocol = 0; // protocollo di comunicazione, 0: MQTT, 1: HTTP
 
 int wifi_rssi; // RSSI rilevato
 

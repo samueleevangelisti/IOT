@@ -6,6 +6,7 @@
 #include "GlobalsAuth.h"
 #include "WifiUtils.h"
 #include "MqttUtils.h"
+#include "Communication.h"
 #include "Dht11Utils.h"
 #include "Mq2Utils.h"
 
@@ -14,8 +15,7 @@ void setup() {
   pinMode(PIN_MQ2_DO, INPUT);
   Serial.begin(115200);
   wifi_connect();
-  mqtt_init();
-  mqtt_connect();
+  communication_init();
   dht11_init();
   Serial.println("SYS   -> [OK  ] initialization");
 }
@@ -25,6 +25,6 @@ void loop() {
   wifi_read();
   dht11_read();
   mq2_read();
-  mqtt_publish();
+  communication_send();
   delay(SAMPLE_FREQUENCY);
 }
