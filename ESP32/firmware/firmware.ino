@@ -9,14 +9,16 @@
 #include "Communication.h"
 #include "Dht11Utils.h"
 #include "Mq2Utils.h"
-
+#include "CoAP.h"
 void setup() {
   Serial.println("SYS   -> [WAIT] initialization");
   pinMode(PIN_MQ2_DO, INPUT);
   Serial.begin(115200);
   wifi_connect();
-  communication_init();
+  //mqtt_init();
+  //mqtt_connect();
   dht11_init();
+  coap_setup();
   Serial.println("SYS   -> [OK  ] initialization");
 }
 
@@ -25,6 +27,7 @@ void loop() {
   wifi_read();
   dht11_read();
   mq2_read();
-  communication_send();
+  //mqtt_publish();
+  coap_process();
   delay(SAMPLE_FREQUENCY);
 }
