@@ -10,33 +10,30 @@ module.exports = {
     url: config.url,
     token: config.token
   }),
-  writeSensor: function(pointObj) {
-    return new Promise((resolve, reject) => {
-      console.log('INFLUX -> [WAIT] write sensor');
-      try {
-        let point = new Point(pointObj.measurement)
-          .tag('id', pointObj.tags.id)
-          .tag('latitude', pointObj.tags.latitude)
-          .tag('longitude', pointObj.tags.longitude)
-          .intField('rssi', pointObj.fields.rssi)
-          .floatField('temperature', pointObj.fields.temperature)
-          .floatField('humidity', pointObj.fields.humidity)
-          .intField('gas', pointObj.fields.gas)
-          .intField('aqi', pointObj.fields.aqi);
-        const writeApi = this._influxdb.getWriteApi(config.organization, this._config.bucket.sensor);
-        writeApi.writePoint(point);
-        writeApi.close()
-          .then((result) => {
-            console.log('INFLUX -> [OK  ] write sensor');
-            resolve(result);
-          })
-          .catch((error) => {
-            console.log('INFLUX -> [ERR ] write sensor');
-            reject(error);
-          });
-      } catch(error) {
-        reject(error);
-      }
-    });
+  writeSensor: function(dataStr) {
+    console.log('INFLUX -> [WAIT] write sensor');
+    try {
+      let dataArr = dataStr.split('|');
+      let point = new Point('sensor')
+        .tag('id', dataArr[0])
+        .tag('latitude', dataArr[1])
+        .tag('longitude', dataArr[2])
+        .intField('rssi', dataArr[3])
+        .floatField('temperature', dataArr[4])
+        .floatField('humidity', dataArr[5])
+        .intField('gas', dataArr[6])
+        .intField('aqi', dataArr[7]);
+      const writeApi = this._influxdb.getWriteApi(config.organization, this._config.bucket.sensor);
+      writeApi.writePoint(point);
+      writeApi.close()
+        .then((result) => {
+          console.log('INFLUX -> [OK  ] write sensor');
+        })
+        .catch((error) => {
+          console.log('INFLUX -> [ERR ] write sensor');
+        });
+    } catch(error) {
+      console.log('INFLUX -> [ERR ] write sensor');
+    }
   }
 };

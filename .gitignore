@@ -1,6 +1,7 @@
 ESP32/firmware/GlobalsAuth.h
 ESP32/firmware/WifiAuth.h
 ESP32/firmware/MqttAuth.h
+ESP32/firmware/CoapAuth.h
 
 MQTT/mqtt-service-config.json
 

@@ -25,9 +25,9 @@ client.on('connect', (response) => {
 });
 
 client.on('message', (topic, message) => {
-  let pointObj = JSON.parse(message.toString());
-  console.log(`[LOG ]\n${JSON.stringify(pointObj, null, 2)}`);
-  influx.writeSensor(pointObj);
+  let dataStr = message.toString();
+  console.log(`[LOG ] ${dataStr}`);
+  influx.writeSensor(dataStr);
 });
 
 client.on('error', (error) => {

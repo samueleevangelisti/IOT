@@ -1,16 +1,18 @@
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include <PubSubClient.h>
+#include <WiFiUdp.h>
+#include <coap-simple.h>
 #include <WebServer.h>
 #include <HTTPClient.h>
 #include <DHT.h>
 
-#include "Globals.h"
 #include "GlobalsAuth.h"
+#include "Globals.h"
 #include "WifiUtils.h"
 #include "Json.h"
 #include "MqttUtils.h"
-//#include "CoAP.h"
+#include "Coap.h"
 #include "Http.h"
 #include "Communication.h"
 #include "Dht11Utils.h"
@@ -28,6 +30,7 @@ void setup() {
 
 void loop() {
   Serial.println("==================================================");
+  communication_loop();
   wifi_read();
   dht11_read();
   mq2_read();

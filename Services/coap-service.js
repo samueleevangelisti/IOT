@@ -1,9 +1,13 @@
+const coap = require('coap');
+const server = coap.createServer();
+const influx = require('./influx');
 
-const coap = require('coap')
-const req = coap.request('coap://'+'192.168.1.213'+'/DATA')
+server.on('request', (req, res) => {
+  let dataStr = req.payload.toString();
+  console.log(`[LOG ] ${dataStr}`);
+  influx.writeSensor(dataStr);
+});
 
-req.on('response', (res) => {
-    res.pipe(process.stdout)
-})
-
-req.end()
+server.listen(() => {
+  console.log('[LOG ] listening on port 5683');
+});

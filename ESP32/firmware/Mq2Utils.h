@@ -19,7 +19,7 @@ void mq2_arr_push() {
     for(int i = 1; i < MQ2_AQI_ARR_MAX_LENGTH; i++) {
       mq2_aqi_arr[i - 1] = mq2_aqi_arr[i];
     }
-    mq2_aqi_arr[mq2_aqi_arr_length - 1] = mq2_gas_ppm;
+    mq2_aqi_arr[MQ2_AQI_ARR_MAX_LENGTH - 1] = mq2_gas_ppm;
   }
 }
 

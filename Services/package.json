@@ -11,6 +11,7 @@
   "dependencies": {
     "@influxdata/influxdb-client": "1.27.0",
     "axios": "0.27.2",
+    "coap": "1.0.11",
     "express": "4.18.1",
     "fs": "0.0.1-security",
     "ip": "1.1.8",
