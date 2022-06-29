@@ -1,5 +1,5 @@
-#ifndef JSON_H
-#define JSON_H
+#ifndef JSONUTILS_H
+#define JSONUTILS_H
 
 StaticJsonDocument<200> json_document;
 DeserializationError json_deserialization_error;

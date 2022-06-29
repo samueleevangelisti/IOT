@@ -10,13 +10,14 @@
 #include "GlobalsAuth.h"
 #include "Globals.h"
 #include "WifiUtils.h"
-#include "Json.h"
+#include "JsonUtils.h"
 #include "MqttUtils.h"
-#include "Coap.h"
-#include "Http.h"
+#include "CoapUtils.h"
+#include "HttpUtils.h"
 #include "Communication.h"
 #include "Dht11Utils.h"
 #include "Mq2Utils.h"
+#include "Dashboard.h"
 
 void setup() {
   Serial.println("SYS   -> [WAIT] initialization");

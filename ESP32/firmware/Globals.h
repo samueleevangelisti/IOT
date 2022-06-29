@@ -1,10 +1,10 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#define PIN_DHT11 0
+int PIN_DHT11 = 0;
 
-#define PIN_MQ2_AO 34
-#define PIN_MQ2_DO 35
+int PIN_MQ2_AO = 34;
+int PIN_MQ2_DO = 35;
 
 int SAMPLE_FREQUENCY = 2000; // frequenza di campionamento. DHT11 sampling rate is 1HZ.
 int MIN_GAS_VALUE = 200; // valore minimo del gas
@@ -23,15 +23,5 @@ int mq2_aqi; // air quality index
 String get_data_string() {
   return String(ESP32_ID) + String("|") + String(ESP32_LATITUDE, 6) + String("|") + String(ESP32_LONGITUDE, 6) + String("|") + String(wifi_rssi) + String("|") + String(dht11_temperature) + String("|") + String(dht11_humidity) + String("|") + String(mq2_gas_ppm) + String("|") + String(mq2_aqi);
 }
-
-// dati in formato json serializzato
-String json_get_data_json_string() {
-  return String("{")
-    + String("\"ESP32_ID\":\"") + String(ESP32_ID) + String("\",")
-    + String("\"ESP32_LATITUDE\":") + String(ESP32_LATITUDE, 6) + String(",")
-    + String("\"ESP32_LONGITUDE\":") + String(ESP32_LONGITUDE, 6)
-  + String("}");
-}
-
 
 #endif

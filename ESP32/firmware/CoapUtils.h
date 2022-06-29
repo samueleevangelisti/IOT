@@ -1,5 +1,5 @@
-#ifndef COAP_H
-#define COAP_H
+#ifndef COAPUTILS_H
+#define COAPUTILS_H
 
 #include "CoapAuth.h"
 
