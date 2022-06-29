@@ -1,0 +1,14 @@
+#--------------- SETUP THING.COAP.h ---------------#
+
+1) Download il file .ZIP da "https://github.com/Alv3s/Thing.CoAP.git"
+
+2) Su arduino IDE andare in
+	Sketch -> Include Library -> Add .ZIP Library 
+
+3) Restart di arduino IDE
+
+
+
+#--------------- SETUP COAP SU NODE JS ---------------#
+
+1) npm install coap --save
