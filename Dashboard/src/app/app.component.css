@@ -1,0 +1,45 @@
+:host {
+  --space-medium: 10pt; 
+  
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.container-div {
+  display: flex;
+  flex: 1;
+}
+
+.progressbar-div {
+  height: 4px;
+}
+
+.find-div, .registered-div {
+  flex: 1;
+  padding: var(--space-medium);
+}
+
+.found-device-card, .registered-device-card {
+  margin-top: var(--space-medium);
+}
+
+.registered-device-card:first-child {
+  margin-top: 0;
+}
+
+.found-device-span, .registered-device-span {
+  margin-left: var(--space-medium);
+}
+
+.registered-device-refresh-button {
+  margin-left: var(--space-medium);
+}
+
+.registered-device-button-div {
+  margin-top: var(--space-medium);
+}
+
+.registered-device-config-div {
+  margin-top: var(--space-medium);
+}

@@ -40,7 +40,7 @@ void http_handle_subscribe() {
     + String("}"));
   } else {
     http_send_url = String((const char *) json_document["url"]);
-    Serial.println("HTTP  -> [LOG ] new send url -> " + String(http_send_url));
+    Serial.println("HTTP  -> [LOG ] new subscribe url -> " + String(http_send_url));
     http_web_server.send(200, "application/json", String("{")
       + String("\"success\":true")
     + String("}"));
