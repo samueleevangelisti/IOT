@@ -3,9 +3,6 @@
 
 #include "MqttAuth.h"
 
-char* MQTT_USER = "IoT"; // user per mqtt
-char* MQTT_PASSWORD = "IoT"; // password per mqtt
-char* MQTT_TOPIC = "sensor"; // topic per l'invio dei dati
 PubSubClient mqtt;
 boolean mqtt_connected;
 boolean mqtt_publish_result;

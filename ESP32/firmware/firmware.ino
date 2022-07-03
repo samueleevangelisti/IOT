@@ -17,12 +17,11 @@
 #include "Communication.h"
 #include "Dht11Utils.h"
 #include "Mq2Utils.h"
-#include "Dashboard.h"
 
 void setup() {
-  Serial.println("SYS   -> [WAIT] initialization");
   pinMode(PIN_MQ2_DO, INPUT);
   Serial.begin(115200);
+  Serial.println("SYS   -> [WAIT] initialization");
   wifi_connect();
   communication_init();
   dht11_init();

@@ -2,18 +2,39 @@
   Dashboard
 </mat-toolbar>
 <div class="progressbar-div">
-  <ng-container *ngIf="isLoading">
+  <ng-container *ngIf="isFind">
     <mat-progress-bar mode="buffer" [value]="count / maxCount * 100"></mat-progress-bar>
   </ng-container>
 </div>
 <div class="container-div">
   <div class="find-div">
+    <form [formGroup]="findFormGroup">
+      <mat-form-field>
+        <mat-label>Network mask</mat-label>
+        <input matInput type="text" autocomplete="off" formControlName="networkMask" (ngModelChange)="findFormGroupNgModelChange()">
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <mat-label>Ip start</mat-label>
+        <input matInput type="text" autocomplete="off" formControlName="ipStart" (ngModelChange)="findFormGroupNgModelChange()">
+      </mat-form-field>
+      <span class="ip-separator-span">-</span>
+      <mat-form-field class="ip-end-form-field">
+        <mat-label>Ip end</mat-label>
+        <input matInput type="text" autocomplete="off" formControlName="ipEnd" (ngModelChange)="findFormGroupNgModelChange()">
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <mat-label>Port</mat-label>
+        <input matInput type="number" formControlName="port">
+      </mat-form-field>
+    </form>
     <div>
-      <button mat-flat-button color="primary" [disabled]="isLoading"(click)="find()">
+      <button mat-flat-button color="primary" [disabled]="isFind"(click)="find()" (ngModelChange)="findFormGroupNgModelChange()">
         <mat-icon>search</mat-icon>
         Find
       </button>
-    </div>
+    </div>    
     <ng-container *ngFor="let foundDevice of foundDeviceArr">
       <mat-card class="found-device-card">
         <button mat-icon-button (click)="addDevice(foundDevice)">
@@ -24,23 +45,15 @@
     </ng-container>
   </div>
   <div class="registered-div">
-    <ng-container *ngFor="let registeredDevice of registeredDeviceArr">
-      <mat-card class="registered-device-card">
-        <div>
-          <button mat-icon-button (click)="removeDevice(registeredDevice)"><mat-icon>remove</mat-icon></button>
-          <button class="registered-device-refresh-button" mat-icon-button (click)="refresh(registeredDevice)"><mat-icon>refresh</mat-icon></button>
-          <span class="registered-device-span">{{ registeredDevice.ip }}:{{ registeredDevice.port }}</span>
-        </div>
-        <div  class="registered-device-button-div">
-          <button mat-flat-button color="primary" (click)="subscribe(registeredDevice)">
-            <mat-icon>leak_add</mat-icon>
-            Subscribe
-          </button>
-        </div>
-        <div class="registered-device-config-div">
-          <pre>{{ getDeviceDashboard(registeredDevice) }}</pre>
-        </div>
-      </mat-card>
-    </ng-container>
+    <mat-accordion>
+      <ng-container *ngFor="let registeredDevice of registeredDeviceArr">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ registeredDevice.ip }}:{{ registeredDevice.port }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-registered-device-expansion-panel [device]="registeredDevice" (onRemove)="onDeviceRemove($event)"></app-registered-device-expansion-panel>
+        </mat-expansion-panel>
+      </ng-container>
+    </mat-accordion>
   </div>
 </div>

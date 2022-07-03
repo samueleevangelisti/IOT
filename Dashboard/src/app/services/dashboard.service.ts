@@ -12,27 +12,16 @@ export class DashboardService {
     private httpClient: HttpClient
   ) { }
 
-  public find(): Observable<any> {
-    let addressArr = [];
-      for(let i = 1; i < 255; i++) {
-        addressArr.push(`192.168.1.${i}`);
-      }
-    return this.httpClient.post(`${environment.baseUrl}/iotfind`, {
-      addressArr: addressArr
-    });
+  public find(address: string): Observable<any> {
+    return this.httpClient.get(`http://${address}/iotfind`);
   }
 
-  public getdashboard(device: any): Observable<any> {
-    return this.httpClient.post(`${environment.baseUrl}/getdashboard`, {
-      url: `http://${device.ip}:${device.port}/dashboard`
-    });
+  public getDashboard(address: string): Observable<any> {
+    return this.httpClient.get(`http://${address}/dashboard`);
   }
 
-  public subscribe(device: any): Observable<any> {
-    return this.httpClient.post(`${environment.baseUrl}/subscribe`, {
-      deviceUrl: `http://${device.ip}:${device.port}/subscribe`,
-      subscribeUrl: 'http://192.168.1.2:8080/send'
-    });
+  public setDashboard(address: string, configObj: any): Observable<any> {
+    return this.httpClient.post(`http://${address}/dashboard`, configObj);
   }
   
 }

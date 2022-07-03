@@ -15,31 +15,24 @@
   height: 4px;
 }
 
-.find-div, .registered-div {
+.find-div {
   flex: 1;
   padding: var(--space-medium);
 }
 
-.found-device-card, .registered-device-card {
-  margin-top: var(--space-medium);
-}
-
-.registered-device-card:first-child {
-  margin-top: 0;
-}
-
-.found-device-span, .registered-device-span {
+.ip-separator-span {
   margin-left: var(--space-medium);
 }
 
-.registered-device-refresh-button {
+.ip-end-form-field {
   margin-left: var(--space-medium);
 }
 
-.registered-device-button-div {
+.found-device-card {
   margin-top: var(--space-medium);
 }
 
-.registered-device-config-div {
-  margin-top: var(--space-medium);
+.registered-div {
+  flex: 1;
+  padding: var(--space-medium);
 }

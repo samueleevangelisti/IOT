@@ -1,0 +1,15 @@
+.refresh-button {
+  margin-left: var(--space-medium);
+}
+
+.values-form {
+  margin-top: var(--space-medium);
+}
+
+.form-field-space-left {
+  margin-left: var(--space-medium);
+}
+
+.button-div {
+  margin-top: var(--space-medium);
+}

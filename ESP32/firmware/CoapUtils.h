@@ -3,7 +3,6 @@
 
 #include "CoapAuth.h"
 
-char* COAP_URL = "sensor";
 WiFiUDP coap_wifi_udp;
 Coap coap(coap_wifi_udp);
 
