@@ -53,13 +53,15 @@ app.post('/proxy', (req, res) => {
 
 app.listen(config.port, () => {
   console.log(`[LOG ] listen on port ${config.port}`);
-  chromeLauncher.launch({
-    startingUrl: '--app=http://localhost:8081',
-    chromeFlags: ['--start-maximized']
-  })
-    .then((chrome) => {
-      chrome.process.on('exit', () => {
-        process.exit(0);
+  if(process.argv[2] != 'no-autostart') {
+    chromeLauncher.launch({
+      startingUrl: '--app=http://localhost:8081',
+      chromeFlags: ['--start-maximized']
+    })
+      .then((chrome) => {
+        chrome.process.on('exit', () => {
+          process.exit(0);
+        });
       });
-    });
+  }
 });

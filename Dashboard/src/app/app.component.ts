@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DashboardService } from './services/dashboard.service';
 
 @Component({
@@ -21,6 +22,7 @@ export class AppComponent {
   public registeredDeviceArr: Array<any>;
 
   constructor(
+    private matSnackbar: MatSnackBar,
     private dashboardService: DashboardService
   ) {
     this.isFind = false;
@@ -79,10 +81,7 @@ export class AppComponent {
       port: this.portFormControl
     });
     this.findFormGroup.markAllAsTouched();
-    this.foundDeviceArr = [{
-      ip: '127.0.0.1',
-      port: 80
-    }];
+    this.foundDeviceArr = [];
     this.registeredDeviceArr = [];
   }
 
@@ -144,9 +143,11 @@ export class AppComponent {
                     ip: response.ip,
                     port: response.port
                   });
+                  this.matSnackbar.open(`Found device ${response.ip}:${response.port}`, 'Close');
                 }
                 if(this.count == this.maxCount) {
                   this.isFind = false;
+                  this.matSnackbar.open('Done', 'Close');
                 }
               },
               error: (error) => {
@@ -154,12 +155,14 @@ export class AppComponent {
                 console.log(error);
                 if(this.count == this.maxCount) {
                   this.isFind = false;
+                  this.matSnackbar.open('Done', 'Close');
                 }
               }
             });
         });
       } else {
         this.isFind = false;
+        this.matSnackbar.open('No usable addresses', 'Close');
       } 
     }
   }

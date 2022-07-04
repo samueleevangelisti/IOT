@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DashboardService } from 'src/app/services/dashboard.service';
 
 @Component({
@@ -18,6 +19,7 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
   public formGroup: FormGroup;
   
   constructor(
+    private matSnackbar: MatSnackBar,
     private dashboardService: DashboardService
   ) {
     this.isLoading = false;
@@ -111,10 +113,12 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
             this.formGroup.controls['HTTP_SEND_URL'].setValue(response.data.HTTP_SEND_URL);
           }
           this.isLoading = false;
+          this.matSnackbar.open(`Got dashboard for ${this.device.ip}:${this.device.port}`, 'Close');
         },
         error: (error) => {
           console.log(error);
           this.isLoading = false;
+          this.matSnackbar.open(`Unable get dashboard for ${this.device.ip}:${this.device.port}`, 'Close');
         }
       });
   }
@@ -126,11 +130,13 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
         .subscribe({
           next: (response) => {
             console.log(response);
+            this.matSnackbar.open(`Set dashboard for ${this.device.ip}:${this.device.port}`, 'Close');
             this.refresh();
           },
           error: (error) => {
             console.log(error);
             this.isLoading = false;
+            this.matSnackbar.open(`Unable set dashboard for ${this.device.ip}:${this.device.port}`, 'Close');
           }
         });
     }

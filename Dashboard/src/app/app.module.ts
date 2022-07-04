@@ -16,6 +16,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ProxyInterceptor } from './interceptors/proxy.interceptor';
 import { RegisteredDeviceExpansionPanelComponent } from './components/expansion-panel/registered-device-expansion-panel/registered-device-expansion-panel.component';
@@ -38,7 +39,8 @@ import { RegisteredDeviceExpansionPanelComponent } from './components/expansion-
     MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

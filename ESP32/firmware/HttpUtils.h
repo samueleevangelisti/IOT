@@ -19,13 +19,14 @@ void http_handle_iot_find() {
 void http_handle_dashboard() {
   switch(http_web_server.method()) {
     case HTTP_GET:
-      Serial.println("HTTP  -> [LOG ] dashboard  request");
+      Serial.println("HTTP  -> [LOG ] dashboard  get");
       http_web_server.send(200, "application/json", String("{")
         + String("\"success\":true,")
         + String("\"data\":") + get_dashboard_json()
       + String("}"));
       break;
     case HTTP_POST:
+      Serial.println("HTTP  -> [LOG ] dashboard  set");
       json_deserialize(http_web_server.arg(0));
       if(json_deserialization_error) {
         Serial.println("JSON  -> [ERR ] deserialization");
@@ -34,6 +35,12 @@ void http_handle_dashboard() {
         + String("}"));
       } else {
         strcpy(ESP32_ID, (const char*) json_document["ESP32_ID"]);
+        ESP32_LATITUDE = (float) json_document["ESP32_LATITUDE"];
+        ESP32_LONGITUDE = (float) json_document["ESP32_LONGITUDE"];
+        SAMPLE_FREQUENCY = (int) json_document["SAMPLE_FREQUENCY"];
+        MIN_GAS_VALUE = (int) json_document["MIN_GAS_VALUE"];
+        MAX_GAS_VALUE = (int) json_document["MAX_GAS_VALUE"];
+        COMMUNICATION_PROTOCOL = (int) json_document["COMMUNICATION_PROTOCOL"];
         strcpy(MQTT_SERVER, (const char*) json_document["MQTT_SERVER"]);
         strcpy(MQTT_USER, (const char*) json_document["MQTT_USER"]);
         strcpy(MQTT_PASSWORD, (const char*) json_document["MQTT_PASSWORD"]);
@@ -41,7 +48,6 @@ void http_handle_dashboard() {
         COAP_SERVER.fromString(String((const char*) json_document["COAP_SERVER"]));
         strcpy(COAP_URL, (const char*) json_document["COAP_URL"]);
         strcpy(HTTP_SEND_URL, (const char*) json_document["HTTP_SEND_URL"]);
-        Serial.println("HTTP  -> [LOG ] new subscribe url -> " + String(HTTP_SEND_URL));
         http_web_server.send(200, "application/json", String("{")
           + String("\"success\":true")
         + String("}"));
