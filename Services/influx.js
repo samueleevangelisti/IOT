@@ -19,10 +19,12 @@ module.exports = {
         .tag('latitude', dataArr[1])
         .tag('longitude', dataArr[2])
         .intField('rssi', dataArr[3])
-        .floatField('temperature', dataArr[4])
-        .floatField('humidity', dataArr[5])
-        .intField('gas', dataArr[6])
-        .intField('aqi', dataArr[7]);
+        .intField('packets', dataArr[4])
+        .intField('delay', dataArr[5])
+        .floatField('temperature', dataArr[6])
+        .floatField('humidity', dataArr[7])
+        .intField('gas', dataArr[8])
+        .intField('aqi', dataArr[9]);
       const writeApi = this._influxdb.getWriteApi(config.organization, this._config.bucket.sensor);
       writeApi.writePoint(point);
       writeApi.close()

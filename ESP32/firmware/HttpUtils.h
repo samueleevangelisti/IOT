@@ -71,11 +71,15 @@ void http_loop() {
 
 // invio dei dati
 void http_send() {
+  wifi_packet_sent++;
   http_client.begin(HTTP_SEND_URL);
   http_client.addHeader("Content-type", "application/json");
+  wifi_packet_timestamp_start = millis();
   http_response_code = http_client.POST(String("{\"data\":\"") + get_data_string() + String("\"}"));
   if(http_response_code > 0) {
+    wifi_packet_delay = millis() - wifi_packet_timestamp_start;
     Serial.println("HTTP  -> [OK  ] data sent to server");
+    wifi_packet_sent = 0;
   } else {
     Serial.println("HTTP  -> [ERR ] unable to send data");
   }

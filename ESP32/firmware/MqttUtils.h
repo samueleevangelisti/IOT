@@ -30,17 +30,24 @@ void mqtt_init() {
 
 // pubblicazione dei dati sul broket MQTT
 void mqtt_publish() {
+  wifi_packet_sent++;
   mqtt_connected = mqtt.connected();
   if(!mqtt_connected) {
     mqtt_connect();
   }
   if(mqtt_connected) {
+    wifi_packet_timestamp_start = millis();
     mqtt_publish_result = mqtt.publish(MQTT_TOPIC, get_data_string().c_str());
     if(mqtt_publish_result) {
+      wifi_packet_delay = millis() - wifi_packet_timestamp_start;
       Serial.println("MQTT  -> [OK  ] data sent to broker");
+      wifi_packet_sent = 0;
     } else {
       Serial.println("MQTT  -> [ERR ] unable to send data");
     }
+  } else {
+    wifi_packet_timestamp_start = 0;
+    wifi_packet_delay = 0;
   }
 }
 

@@ -4,7 +4,6 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios').default;
-const ip = require('ip');
 const chromeLauncher = require('chrome-launcher');
 
 const sse = require('./sse');
@@ -27,7 +26,7 @@ app.post('/proxy', (req, res) => {
     case 'GET':
       axios.get(req.body.url)
         .then((response) => {
-          console.log(`[OK  ]\n${JSON.stringify(response.data)}`);
+          console.log(`[OK  ]\n${JSON.stringify(response.data, null, 2)}`);
           res.send(response.data);
         })
         .catch((error) => {
@@ -38,7 +37,7 @@ app.post('/proxy', (req, res) => {
     case 'POST':
       axios.post(req.body.url, req.body.body)
         .then((response) => {
-          console.log(`[OK  ]\n${JSON.stringify(response.data)}`);
+          console.log(`[OK  ]\n${JSON.stringify(response.data, null, 2)}`);
           res.send(response.data);
         })
         .catch((error) => {

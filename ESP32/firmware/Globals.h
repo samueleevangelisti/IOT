@@ -22,6 +22,9 @@ char COAP_URL[20] = "sensor"; // url per l'identificazione dei dati
 char HTTP_SEND_URL[50]; // url per l'invio dei dati
 
 int wifi_rssi; // RSSI rilevato
+int wifi_packet_sent = 0; // pacchetti inviati dall'ultima ricezione corretta
+int wifi_packet_timestamp_start = 0; // timestamp di invio pacchett
+int wifi_packet_delay = 0; // delay tra invio da ESP32 e ricezione nel proxy del pacchetto
 
 float dht11_temperature; // temperatura rilevata
 float dht11_humidity; // umidità rilevata
@@ -31,7 +34,7 @@ int mq2_aqi; // air quality index
 
 // dati in formato append
 String get_data_string() {
-  return String(ESP32_ID) + String("|") + String(ESP32_LATITUDE, 6) + String("|") + String(ESP32_LONGITUDE, 6) + String("|") + String(wifi_rssi) + String("|") + String(dht11_temperature) + String("|") + String(dht11_humidity) + String("|") + String(mq2_gas_ppm) + String("|") + String(mq2_aqi);
+  return String(ESP32_ID) + String("|") + String(ESP32_LATITUDE, 6) + String("|") + String(ESP32_LONGITUDE, 6) + String("|") + String(wifi_rssi) + String("|") + String(wifi_packet_sent) + String("|") + String(wifi_packet_delay) + String("|") + String(dht11_temperature) + String("|") + String(dht11_humidity) + String("|") + String(mq2_gas_ppm) + String("|") + String(mq2_aqi);
 }
 
 // dati in formato json serializzato
