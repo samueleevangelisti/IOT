@@ -1,7 +1,9 @@
 #ifndef HTTPUTILS_H
 #define HTTPUTILS_H
 
-WebServer http_web_server(80);
+#include "HttpAuth.h"
+
+WebServer http_web_server(http_port);
 HTTPClient http_client;
 int http_response_code;
 
@@ -11,7 +13,7 @@ void http_handle_iot_find() {
   http_web_server.send(200, "application/json", String("{")
     + String("\"success\":true,")
     + String("\"ip\":\"") + WiFi.localIP().toString() + String("\",")
-    + String("\"port\":80")
+    + String("\"port\":") + String(http_port)
   + String("}"));
 }
 
@@ -49,9 +51,12 @@ void http_handle_dashboard() {
         strcpy(COAP_URL, (const char*) json_document["COAP_URL"]);
         strcpy(HTTP_SEND_URL, (const char*) json_document["HTTP_SEND_URL"]);
         http_web_server.send(200, "application/json", String("{")
-          + String("\"success\":true")
+          + String("\"success\":true,")
+          + String("\"data\":") + get_dashboard_json()
         + String("}"));
       }
+      break;
+    default:
       break;
   }
 }

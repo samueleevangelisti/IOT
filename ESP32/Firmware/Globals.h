@@ -6,6 +6,9 @@ int PIN_DHT11 = 0;
 int PIN_MQ2_AO = 34;
 int PIN_MQ2_DO = 35;
 
+extern char WIFI_SSID[];
+extern char WIFI_PASSWORD[];
+
 int SAMPLE_FREQUENCY = 2000; // frequenza di campionamento. DHT11 sampling rate is 1HZ.
 int MIN_GAS_VALUE = 200; // valore minimo del gas
 int MAX_GAS_VALUE = 10000; // valore massimo del gas
@@ -43,6 +46,8 @@ String get_dashboard_json() {
     + String("\"PIN_DHT11\":") + String(PIN_DHT11) + String(",")
     + String("\"PIN_MQ2_AO\":") + String(PIN_MQ2_AO) + String(",")
     + String("\"PIN_MQ2_DO\":") + String(PIN_MQ2_DO) + String(",")
+    + String("\"WIFI_SSID\":\"") + String(WIFI_SSID) + String("\",")
+    + String("\"WIFI_PASSWORD\":\"") + String(WIFI_PASSWORD) + String("\",")
     + String("\"ESP32_ID\":\"") + String(ESP32_ID) + String("\",")
     + String("\"ESP32_LATITUDE\":") + String(ESP32_LATITUDE, 6) + String(",")
     + String("\"ESP32_LONGITUDE\":") + String(ESP32_LONGITUDE, 6) + String(",")

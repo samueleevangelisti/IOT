@@ -18,6 +18,8 @@ export class AppComponent {
   public ipEndFormControl: FormControl;
   public portFormControl: FormControl;
   public findFormGroup: FormGroup;
+  public addressFormControl: FormControl;
+  public addFormGroup: FormGroup;
   public foundDeviceArr: Array<any>;
   public registeredDeviceArr: Array<any>;
 
@@ -80,7 +82,15 @@ export class AppComponent {
       ipEnd: this.ipEndFormControl,
       port: this.portFormControl
     });
+    this.addressFormControl = new FormControl('192.168.4.1:80', [
+      Validators.required,
+      Validators.pattern(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+/)
+    ]);
+    this.addFormGroup = new FormGroup({
+      address: this.addressFormControl
+    });
     this.findFormGroup.markAllAsTouched();
+    this.addFormGroup.markAllAsTouched();
     this.foundDeviceArr = [];
     this.registeredDeviceArr = [];
   }
@@ -143,11 +153,15 @@ export class AppComponent {
                     ip: response.ip,
                     port: response.port
                   });
-                  this.matSnackbar.open(`Found device ${response.ip}:${response.port}`, 'Close');
+                  this.matSnackbar.open(`Found device ${response.ip}:${response.port}`, 'Close', {
+                    duration: 2000
+                  });
                 }
                 if(this.count == this.maxCount) {
                   this.isFind = false;
-                  this.matSnackbar.open('Done', 'Close');
+                  this.matSnackbar.open('Done', 'Close', {
+                    duration: 2000
+                  });
                 }
               },
               error: (error) => {
@@ -155,14 +169,18 @@ export class AppComponent {
                 console.log(error);
                 if(this.count == this.maxCount) {
                   this.isFind = false;
-                  this.matSnackbar.open('Done', 'Close');
+                  this.matSnackbar.open('Done', 'Close', {
+                    duration: 2000
+                  });
                 }
               }
             });
         });
       } else {
         this.isFind = false;
-        this.matSnackbar.open('No usable addresses', 'Close');
+        this.matSnackbar.open('No usable addresses', 'Close', {
+          duration: 2000
+        });
       } 
     }
   }
@@ -170,6 +188,14 @@ export class AppComponent {
   public addDevice(device: any): void {
     this.foundDeviceArr.splice(this.foundDeviceArr.indexOf(device), 1);
     this.registeredDeviceArr.push(device);
+  }
+
+  public addSpecificDevice(): void {
+    let addressArr = this.addFormGroup.controls['address'].value.split(':');
+    this.registeredDeviceArr.push({
+      ip: addressArr[0],
+      port: addressArr[1]
+    });
   }
 
   public onDeviceRemove(device: any): void {

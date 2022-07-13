@@ -26,15 +26,27 @@
       <br>
       <mat-form-field>
         <mat-label>Port</mat-label>
-        <input matInput type="number" formControlName="port">
+        <input matInput type="number" autocomplete="off" formControlName="port">
       </mat-form-field>
     </form>
     <div>
-      <button mat-flat-button color="primary" [disabled]="isFind"(click)="find()" (ngModelChange)="findFormGroupNgModelChange()">
+      <button mat-flat-button color="primary" [disabled]="isFind" (click)="find()" (ngModelChange)="findFormGroupNgModelChange()">
         <mat-icon>search</mat-icon>
         Find
       </button>
-    </div>    
+    </div>
+    <form class="add-form" [formGroup]="addFormGroup">
+      <mat-form-field>
+        <mat-label>Ip</mat-label>
+        <input matInput type="text" autocomplete="off" formControlName="address">
+      </mat-form-field>
+    </form>
+    <div>
+      <button mat-flat-button color="primary" [disabled]="isFind" (click)="addSpecificDevice()">
+        <mat-icon>add</mat-icon>
+        Add
+      </button>
+    </div>
     <ng-container *ngFor="let foundDevice of foundDeviceArr">
       <mat-card class="found-device-card">
         <button mat-icon-button (click)="addDevice(foundDevice)">

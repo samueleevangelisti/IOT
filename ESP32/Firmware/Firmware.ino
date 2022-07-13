@@ -1,7 +1,6 @@
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include <PubSubClient.h>
-#include <WiFiUdp.h>
 #include <coap-simple.h>
 #include <WebServer.h>
 #include <HTTPClient.h>
@@ -22,6 +21,7 @@ void setup() {
   pinMode(PIN_MQ2_DO, INPUT);
   Serial.begin(115200);
   Serial.println("SYS   -> [WAIT] initialization");
+  wifi_init();
   wifi_connect();
   communication_init();
   dht11_init();

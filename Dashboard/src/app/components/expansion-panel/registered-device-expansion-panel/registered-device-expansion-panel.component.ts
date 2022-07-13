@@ -27,6 +27,8 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
       PIN_DHT11: new FormControl(''),
       PIN_MQ2_AO: new FormControl(''),
       PIN_MQ2_DO: new FormControl(''),
+      WIFI_SSID: new FormControl(''),
+      WIFI_PASSWORD: new FormControl(''),
       ESP32_ID: new FormControl('', [
         Validators.required,
         Validators.maxLength(20)
@@ -93,32 +95,24 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log(response);
-          if(response.success) {
-            this.formGroup.controls['PIN_DHT11'].setValue(response.data.PIN_DHT11);
-            this.formGroup.controls['PIN_MQ2_AO'].setValue(response.data.PIN_MQ2_AO);
-            this.formGroup.controls['PIN_MQ2_DO'].setValue(response.data.PIN_MQ2_DO);
-            this.formGroup.controls['ESP32_ID'].setValue(response.data.ESP32_ID);
-            this.formGroup.controls['ESP32_LATITUDE'].setValue(response.data.ESP32_LATITUDE);
-            this.formGroup.controls['ESP32_LONGITUDE'].setValue(response.data.ESP32_LONGITUDE);
-            this.formGroup.controls['SAMPLE_FREQUENCY'].setValue(response.data.SAMPLE_FREQUENCY);
-            this.formGroup.controls['MIN_GAS_VALUE'].setValue(response.data.MIN_GAS_VALUE);
-            this.formGroup.controls['MAX_GAS_VALUE'].setValue(response.data.MAX_GAS_VALUE);
-            this.formGroup.controls['COMMUNICATION_PROTOCOL'].setValue(response.data.COMMUNICATION_PROTOCOL);
-            this.formGroup.controls['MQTT_SERVER'].setValue(response.data.MQTT_SERVER);
-            this.formGroup.controls['MQTT_USER'].setValue(response.data.MQTT_USER);
-            this.formGroup.controls['MQTT_PASSWORD'].setValue(response.data.MQTT_PASSWORD);
-            this.formGroup.controls['MQTT_TOPIC'].setValue(response.data.MQTT_TOPIC);
-            this.formGroup.controls['COAP_SERVER'].setValue(response.data.COAP_SERVER);
-            this.formGroup.controls['COAP_URL'].setValue(response.data.COAP_URL);
-            this.formGroup.controls['HTTP_SEND_URL'].setValue(response.data.HTTP_SEND_URL);
-          }
           this.isLoading = false;
-          this.matSnackbar.open(`Got dashboard for ${this.device.ip}:${this.device.port}`, 'Close');
+          if(response.success) {
+            this.formGroup.setValue(response.data);
+            this.matSnackbar.open(`Got dashboard for ${this.device.ip}:${this.device.port}`, 'Close', {
+              duration: 2000
+            });
+          } else {
+            this.matSnackbar.open(`Unable get dashboard for ${this.device.ip}:${this.device.port}`, 'Close', {
+              duration: 2000
+            });
+          }
         },
         error: (error) => {
           console.log(error);
           this.isLoading = false;
-          this.matSnackbar.open(`Unable get dashboard for ${this.device.ip}:${this.device.port}`, 'Close');
+          this.matSnackbar.open(`Unable get dashboard for ${this.device.ip}:${this.device.port}`, 'Close', {
+            duration: 2000
+          });
         }
       });
   }
@@ -130,13 +124,24 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
         .subscribe({
           next: (response) => {
             console.log(response);
-            this.matSnackbar.open(`Set dashboard for ${this.device.ip}:${this.device.port}`, 'Close');
-            this.refresh();
+            this.isLoading = false;
+            if(response.success) {
+              this.formGroup.setValue(response.data);
+              this.matSnackbar.open(`Set dashboard for ${this.device.ip}:${this.device.port}`, 'Close', {
+                duration: 2000
+              });
+            } else {
+              this.matSnackbar.open(`Unable set dashboard for ${this.device.ip}:${this.device.port}`, 'Close', {
+                duration: 2000
+              });
+            }
           },
           error: (error) => {
             console.log(error);
             this.isLoading = false;
-            this.matSnackbar.open(`Unable set dashboard for ${this.device.ip}:${this.device.port}`, 'Close');
+            this.matSnackbar.open(`Unable set dashboard for ${this.device.ip}:${this.device.port}`, 'Close', {
+              duration: 2000
+            });
           }
         });
     }

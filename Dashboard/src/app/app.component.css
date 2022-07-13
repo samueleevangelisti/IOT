@@ -28,6 +28,10 @@
   margin-left: var(--space-medium);
 }
 
+.add-form {
+  margin-top: var(--space-medium);
+}
+
 .found-device-card {
   margin-top: var(--space-medium);
 }
