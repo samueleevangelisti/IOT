@@ -1,8 +1,6 @@
 #ifndef COAPUTILS_H
 #define COAPUTILS_H
 
-#include "CoapAuth.h"
-
 WiFiUDP coap_wifi_udp;
 Coap coap(coap_wifi_udp);
 
@@ -27,10 +25,14 @@ void coap_init() {
 
 // invio dei dati
 void coap_send() {
-  wifi_packet_sent++;
-  wifi_packet_timestamp_start = millis();
-  coap.put(COAP_SERVER, 5683, COAP_URL, get_data_string().c_str());
-  Serial.println("COAP  -> [LOG ] sending data");
+  if(strcmp(COAP_SERVER.toString().c_str(), "127.0.0.1") == 0) {
+    Serial.println("COAP  -> [LOG ] coap server not set");
+  } else {
+    wifi_packet_sent++;
+    wifi_packet_timestamp_start = millis();
+    coap.put(COAP_SERVER, 5683, COAP_URL, get_data_string().c_str());
+    Serial.println("COAP  -> [LOG ] sending data");
+  }
 }
 
 #endif

@@ -1,14 +1,14 @@
 <div>
-  <button mat-flat-button [disabled]="isLoading" (click)="remove()">
+  <button mat-flat-button [disabled]="isLoadingDashboard" (click)="remove()">
     <mat-icon>remove</mat-icon>
     Remove
   </button>
-  <button class="refresh-button" mat-flat-button [disabled]="isLoading" (click)="refresh()">
+  <button class="refresh-button" mat-flat-button [disabled]="isLoadingDashboard" (click)="refresh()">
     <mat-icon>refresh</mat-icon>
     Refresh
   </button>
 </div>
-<form class="values-form" [formGroup]="formGroup">
+<form class="values-form" [formGroup]="dashboardFormGroup">
   <mat-form-field>
     <mat-label>PIN_DHT11 (readonly)</mat-label>
     <input matInput type="number" autocomplete="off" readonly formControlName="PIN_DHT11">
@@ -93,12 +93,16 @@
   </mat-form-field>
   <br>
   <mat-form-field>
+    <mat-label>HTTP_PORT (readonly)</mat-label>
+    <input matInput type="number" autocomplete="off" readonly formControlName="HTTP_PORT">
+  </mat-form-field>
+  <mat-form-field class="form-field-space-left">
     <mat-label>HTTP_SEND_URL</mat-label>
     <input matInput type="text" autocomplete="off" formControlName="HTTP_SEND_URL">
   </mat-form-field>
 </form>
 <div class="button-div">
-  <button mat-flat-button color="primary" [disabled]="isLoading" (click)="setValues()">
+  <button mat-flat-button color="primary" [disabled]="isLoadingDashboard" (click)="setDashboard()">
     <mat-icon>check</mat-icon>
     Set values
   </button>

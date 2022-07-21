@@ -15,20 +15,26 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
   @Output()
   private onRemove = new EventEmitter();
 
-  public isLoading: boolean;
-  public formGroup: FormGroup;
+  public isLoadingDashboard: boolean;
+  public dashboardFormGroup: FormGroup;
   
   constructor(
     private matSnackbar: MatSnackBar,
     private dashboardService: DashboardService
   ) {
-    this.isLoading = false;
-    this.formGroup = new FormGroup({
+    this.isLoadingDashboard = false;
+    this.dashboardFormGroup = new FormGroup({
       PIN_DHT11: new FormControl(''),
       PIN_MQ2_AO: new FormControl(''),
       PIN_MQ2_DO: new FormControl(''),
-      WIFI_SSID: new FormControl(''),
-      WIFI_PASSWORD: new FormControl(''),
+      WIFI_SSID: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(100)
+      ]),
+      WIFI_PASSWORD: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(100)
+      ]),
       ESP32_ID: new FormControl('', [
         Validators.required,
         Validators.maxLength(20)
@@ -75,6 +81,7 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
       COAP_URL: new FormControl('', [
         Validators.maxLength(20)
       ]),
+      HTTP_PORT: new FormControl(''),
       HTTP_SEND_URL: new FormControl('', [
         Validators.maxLength(50)
       ]),
@@ -90,14 +97,14 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
   }
 
   public refresh(): void {
-    this.isLoading = true;
+    this.isLoadingDashboard = true;
     this.dashboardService.getDashboard(`${this.device.ip}:${this.device.port}`)
       .subscribe({
         next: (response) => {
           console.log(response);
-          this.isLoading = false;
+          this.isLoadingDashboard = false;
           if(response.success) {
-            this.formGroup.setValue(response.data);
+            this.dashboardFormGroup.setValue(response.data);
             this.matSnackbar.open(`Got dashboard for ${this.device.ip}:${this.device.port}`, 'Close', {
               duration: 2000
             });
@@ -109,7 +116,7 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
         },
         error: (error) => {
           console.log(error);
-          this.isLoading = false;
+          this.isLoadingDashboard = false;
           this.matSnackbar.open(`Unable get dashboard for ${this.device.ip}:${this.device.port}`, 'Close', {
             duration: 2000
           });
@@ -117,16 +124,16 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
       });
   }
 
-  public setValues(): void {
-    if(this.formGroup.valid) {
-      this.isLoading = true;
-      this.dashboardService.setDashboard(`${this.device.ip}:${this.device.port}`, this.formGroup.value)
+  public setDashboard(): void {
+    if(this.dashboardFormGroup.valid) {
+      this.isLoadingDashboard = true;
+      this.dashboardService.setDashboard(`${this.device.ip}:${this.device.port}`, this.dashboardFormGroup.value)
         .subscribe({
           next: (response) => {
             console.log(response);
-            this.isLoading = false;
+            this.isLoadingDashboard = false;
             if(response.success) {
-              this.formGroup.setValue(response.data);
+              this.dashboardFormGroup.setValue(response.data);
               this.matSnackbar.open(`Set dashboard for ${this.device.ip}:${this.device.port}`, 'Close', {
                 duration: 2000
               });
@@ -138,7 +145,7 @@ export class RegisteredDeviceExpansionPanelComponent implements OnInit {
           },
           error: (error) => {
             console.log(error);
-            this.isLoading = false;
+            this.isLoadingDashboard = false;
             this.matSnackbar.open(`Unable set dashboard for ${this.device.ip}:${this.device.port}`, 'Close', {
               duration: 2000
             });

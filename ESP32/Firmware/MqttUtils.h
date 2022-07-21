@@ -1,8 +1,6 @@
 #ifndef MQTTUTILS_H
 #define MQTTUTILS_H
 
-#include "MqttAuth.h"
-
 PubSubClient mqtt;
 boolean mqtt_connected;
 boolean mqtt_publish_result;
@@ -25,29 +23,32 @@ void mqtt_init() {
   mqtt.setServer(MQTT_SERVER, 1883);
   mqtt.setBufferSize(400);
   Serial.println("MQTT  -> [OK  ] initialization");
-  mqtt_connect();
 }
 
 // pubblicazione dei dati sul broket MQTT
 void mqtt_publish() {
-  wifi_packet_sent++;
-  mqtt_connected = mqtt.connected();
-  if(!mqtt_connected) {
-    mqtt_connect();
-  }
-  if(mqtt_connected) {
-    wifi_packet_timestamp_start = millis();
-    mqtt_publish_result = mqtt.publish(MQTT_TOPIC, get_data_string().c_str());
-    if(mqtt_publish_result) {
-      wifi_packet_delay = millis() - wifi_packet_timestamp_start;
-      Serial.println("MQTT  -> [OK  ] data sent to broker");
-      wifi_packet_sent = 0;
-    } else {
-      Serial.println("MQTT  -> [ERR ] unable to send data");
-    }
+  if(strlen(MQTT_SERVER) == 0) {
+    Serial.println("MQTT  -> [LOG ] broker not set");
   } else {
-    wifi_packet_timestamp_start = 0;
-    wifi_packet_delay = 0;
+    wifi_packet_sent++;
+    mqtt_connected = mqtt.connected();
+    if(!mqtt_connected) {
+      mqtt_connect();
+    }
+    if(mqtt_connected) {
+      wifi_packet_timestamp_start = millis();
+      mqtt_publish_result = mqtt.publish(MQTT_TOPIC, get_data_string().c_str());
+      if(mqtt_publish_result) {
+        wifi_packet_delay = millis() - wifi_packet_timestamp_start;
+        Serial.println("MQTT  -> [OK  ] data sent to broker");
+        wifi_packet_sent = 0;
+      } else {
+        Serial.println("MQTT  -> [ERR ] unable to send data");
+      }
+    } else {
+      wifi_packet_timestamp_start = 0;
+      wifi_packet_delay = 0;
+    }
   }
 }
 

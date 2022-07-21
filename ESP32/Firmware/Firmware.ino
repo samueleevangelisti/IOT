@@ -6,7 +6,6 @@
 #include <HTTPClient.h>
 #include <DHT.h>
 
-#include "GlobalsAuth.h"
 #include "Globals.h"
 #include "WifiUtils.h"
 #include "JsonUtils.h"

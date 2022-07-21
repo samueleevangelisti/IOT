@@ -1,9 +1,7 @@
 #ifndef HTTPUTILS_H
 #define HTTPUTILS_H
 
-#include "HttpAuth.h"
-
-WebServer http_web_server(http_port);
+WebServer http_web_server(HTTP_PORT);
 HTTPClient http_client;
 int http_response_code;
 
@@ -13,7 +11,7 @@ void http_handle_iot_find() {
   http_web_server.send(200, "application/json", String("{")
     + String("\"success\":true,")
     + String("\"ip\":\"") + WiFi.localIP().toString() + String("\",")
-    + String("\"port\":") + String(http_port)
+    + String("\"port\":") + String(HTTP_PORT)
   + String("}"));
 }
 
@@ -36,6 +34,11 @@ void http_handle_dashboard() {
           + String("\"success\":false")
         + String("}"));
       } else {
+        if(strcmp(WIFI_SSID, (const char*) json_document["WIFI_SSID"]) != 0) {
+          strcpy(WIFI_SSID, (const char*) json_document["WIFI_SSID"]);
+          strcpy(WIFI_PASSWORD, (const char*) json_document["WIFI_PASSWORD"]);
+          wifi_connect();
+        }
         strcpy(ESP32_ID, (const char*) json_document["ESP32_ID"]);
         ESP32_LATITUDE = (float) json_document["ESP32_LATITUDE"];
         ESP32_LONGITUDE = (float) json_document["ESP32_LONGITUDE"];
@@ -76,19 +79,23 @@ void http_loop() {
 
 // invio dei dati
 void http_send() {
-  wifi_packet_sent++;
-  http_client.begin(HTTP_SEND_URL);
-  http_client.addHeader("Content-type", "application/json");
-  wifi_packet_timestamp_start = millis();
-  http_response_code = http_client.POST(String("{\"data\":\"") + get_data_string() + String("\"}"));
-  if(http_response_code > 0) {
-    wifi_packet_delay = millis() - wifi_packet_timestamp_start;
-    Serial.println("HTTP  -> [OK  ] data sent to server");
-    wifi_packet_sent = 0;
+  if(strlen(HTTP_SEND_URL) == 0) {
+    Serial.println("HTTP  -> [LOG ] webhook not set");
   } else {
-    Serial.println("HTTP  -> [ERR ] unable to send data");
+    wifi_packet_sent++;
+    http_client.begin(HTTP_SEND_URL);
+    http_client.addHeader("Content-type", "application/json");
+    wifi_packet_timestamp_start = millis();
+    http_response_code = http_client.POST(String("{\"data\":\"") + get_data_string() + String("\"}"));
+    if(http_response_code > 0) {
+      wifi_packet_delay = millis() - wifi_packet_timestamp_start;
+      Serial.println("HTTP  -> [OK  ] data sent to server");
+      wifi_packet_sent = 0;
+    } else {
+      Serial.println("HTTP  -> [ERR ] unable to send data");
+    }
+    http_client.end();
   }
-  http_client.end();
 }
 
 #endif

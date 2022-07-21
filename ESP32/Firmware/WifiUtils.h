@@ -1,8 +1,6 @@
 #ifndef WIFIUTILS_H
 #define WIFIUTILS_H
 
-#include "WifiAuth.h"
-
 WiFiClient wifi_client;
 
 void wifi_init() {
@@ -16,13 +14,17 @@ void wifi_init() {
 // connessione alla rete WiFi
 void wifi_connect(const char* ssid, const char* password) {
   WiFi.disconnect();
-  WiFi.begin(ssid, password);
-  while(WiFi.status() != WL_CONNECTED) {
-    Serial.println("WIFI  -> [WAIT] connection");
-    delay(1000);
+  if(strlen(ssid) == 0) {
+    Serial.println("WIFI  -> [LOG ] ssid not set");
+  } else {
+    WiFi.begin(ssid, password);
+    while(WiFi.status() != WL_CONNECTED) {
+      Serial.println("WIFI  -> [WAIT] connection");
+      delay(1000);
+    }
+    Serial.println("WIFI  -> [OK  ] connected");
+    Serial.println("WIFI  -> [LOG ] ip: " + WiFi.localIP().toString());
   }
-  Serial.println("WIFI  -> [OK  ] connected");
-  Serial.println("WIFI  -> [LOG ] ip: " + WiFi.localIP().toString());
 }
 
 // connessione alla rete wifi
