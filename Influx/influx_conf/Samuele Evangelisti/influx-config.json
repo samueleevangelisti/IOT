@@ -1,9 +1,13 @@
 {
   "url": "http://localhost:8086",
-  "token": "URCbPPWYX6rl5KDvRVMfLFilMzEUvcGtOesPblLPTuUSt3PXIUkYDYUgVqKLhgrrf9Xhl52mkSwYKALf6OSxYw==",
+  "token": "6jrMV4Ns-2Ib6Qt2ttZWqLcVqOkxBlmqnmRFDBq2dfZFidqNzC8W-tPyzQC-GnPYBhwrKbZQQsWNw19H-PcBEg==",
   "organization": "IoT",
   "bucket": {
     "sensor": "IoT-sensor",
-    "weather": "IoT-weather"
+    "weather": "IoT-weather",
+    "forecasting": {
+      "arima": "IoT-forecasting-arima",
+      "prophet": "IoT-forecasting-prophet"
+    }
   }
 }

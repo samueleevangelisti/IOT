@@ -19,4 +19,20 @@ class Influx:
       print('INFLUX -> [OK  ] write weather')
     except:
       print('INFLUX -> [ERR ] write weather')
+
+  def write_forecasting_arima(self, point_dict):
+    print('INFLUX -> [WAIT] write forecasting arima')
+    try:
+      self.write_api.write(bucket=self.config['bucket']['forecasting']['arima'], org=self.config['organization'], record=point_dict)
+      print('INFLUX -> [OK  ] write forecasting arima')
+    except:
+      print('INFLUX -> [ERR ] write forecasting arima')
+
+  def write_forecasting_prohpet(self, point_dict):
+    print('INFLUX -> [WAIT] write forecasting prophet')
+    try:
+      self.write_api.write(bucket=self.config['bucket']['forecasting']['prophet'], org=self.config['organization'], record=point_dict)
+      print('INFLUX -> [OK  ] write forecasting prophet')
+    except:
+      print('INFLUX -> [ERR ] write forecasting prophet')
     
