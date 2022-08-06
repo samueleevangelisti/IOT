@@ -19,9 +19,10 @@ client = influxdb_client.InfluxDBClient(
 )
 query_api = client.query_api()
 query = 'from(bucket: "IoT-sensor")\
-  |> range(start:-1h)\
+  |> range(start: 2022-07-04T18:00:00Z, stop: 2022-07-04T20:30:00Z)\
   |> filter(fn: (r) => r["_measurement"] == "sensor")\
-  |> filter(fn: (r) => r["_field"] == "temperature")'
+  |> filter(fn: (r) => r["_field"] == "temperature")\
+  |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
 
 result = client.query_api().query(org=org, query=query)
 
@@ -33,27 +34,22 @@ for table in result:
 df = pd.DataFrame (results, columns = ['ds', 'y'])
 print (df)
 
-df = df.iloc[:-1000]
 m = Prophet(interval_width=0.95)
 m.fit(df)
 
-p=100
-future = m.make_future_dataframe(periods=p, freq='1 s')
+p=10
+future = m.make_future_dataframe(periods=p, freq='1 min')
 
 forecast = m.predict(future)
 forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail()
 print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
 last_original_data= len(df)
 
-#LAST REAL DATA
-
-#PREDICTED DATA AFTER X_SECONDS
-
 
 #pip install influxdb_client
 #pip install pandas
 fig1 = m.plot(forecast,uncertainty=True)
-fig1.savefig('books_read.png')
+fig1.savefig('books_read.pdf')
 fig1.show()
 import numpy as np
 from sklearn.metrics import mean_absolute_error
@@ -82,8 +78,3 @@ mse = mean_squared_error(expected, predicted)
 rmse = sqrt(mse)
 print('RMSE: %f' % rmse)
 
-
-x_seconds=2
-
-print(expected[-1])
-print(forecast['yhat'].iloc[last_original_data+x_seconds])
