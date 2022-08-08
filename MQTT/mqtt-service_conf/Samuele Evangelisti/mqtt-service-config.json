@@ -2,6 +2,6 @@
   "url": "mqtt://127.0.0.1",
   "user": "IoT",
   "password": "IoT",
-  "id": "mqtt_service_eva",
+  "id": "mqtt-service-eva",
   "topic": "sensor/#"
 }

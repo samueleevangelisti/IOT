@@ -39,7 +39,10 @@ void http_handle_dashboard() {
           strcpy(WIFI_PASSWORD, (const char*) json_document["WIFI_PASSWORD"]);
           wifi_connect();
         }
-        strcpy(ESP32_ID, (const char*) json_document["ESP32_ID"]);
+        if(strcmp(ESP32_ID, (const char*) json_document["ESP32_ID"]) != 0) {
+          strcpy(ESP32_ID, (const char*) json_document["ESP32_ID"]);
+          wifi_init(); 
+        }
         ESP32_LATITUDE = (float) json_document["ESP32_LATITUDE"];
         ESP32_LONGITUDE = (float) json_document["ESP32_LONGITUDE"];
         SAMPLE_FREQUENCY = (int) json_document["SAMPLE_FREQUENCY"];

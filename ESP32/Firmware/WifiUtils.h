@@ -6,7 +6,6 @@ WiFiClient wifi_client;
 void wifi_init() {
   Serial.println("WIFI  -> [WAIT] initialization");
   WiFi.softAP(ESP32_ID, WIFI_AP_PASSWORD);
-  WiFi.softAPsetHostname(ESP32_ID);
   Serial.println("WIFI  -> [LOG ] ap ip: " + WiFi.softAPIP().toString());
   Serial.println("WIFI  -> [OK  ] initialization");
 }

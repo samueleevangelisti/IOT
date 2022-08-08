@@ -6,7 +6,7 @@ int PIN_DHT11 = 0; // pin di configurazione DHT11
 int PIN_MQ2_AO = 34; // pin analogico MQ-2
 int PIN_MQ2_DO = 35; // pin digitale MQ-2
 
-char* WIFI_AP_PASSWORD = "IoTIoTIoT"; // password dell'access point
+char* WIFI_AP_PASSWORD = "123456789"; // password dell'access point
 char WIFI_SSID[100] = ""; // nome della rete wifi
 char WIFI_PASSWORD[100] = ""; // password della rete wifi
 
