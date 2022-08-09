@@ -43,7 +43,7 @@ class Influx:
         try:
             self.delete_api.delete('1970-01-01T00:00:00Z', (datetime.now() + timedelta(days=365)).timestamp() * 1000000000, '_measurement="forecasting"', bucket_id=self.config['bucket']['forecasting']['arima'], org_id=self.config['organization'])
             print('INFLUX -> [OK  ] delete forecasting arima')
-        except e as Exception:
+        except Exception as e:
             print('INFLUX -> [ERR ] delete forecasting arima')
             print(e)
         
