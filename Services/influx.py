@@ -41,7 +41,7 @@ class Influx:
     def delete_forecasting_arima_all(self):
         print('INFLUX -> [WAIT] delete forecasting arima')
         try:
-            self.delete_api.delete('1970-01-01T00:00:00Z', (datetime.now() + timedelta(days=365)).strftime('%Y-%m-%dT%H:%M:%SZ') '_measurement="forecasting"', bucket=self.config['bucket']['forecasting']['arima'], org=self.config['organization'])
+            self.delete_api.delete('1970-01-01T00:00:00Z', (datetime.now() + timedelta(days=365)).strftime('%Y-%m-%dT%H:%M:%SZ'), '_measurement="forecasting"', bucket=self.config['bucket']['forecasting']['arima'], org=self.config['organization'])
             print('INFLUX -> [OK  ] delete forecasting arima')
         except Exception as e:
             print('INFLUX -> [ERR ] delete forecasting arima')
