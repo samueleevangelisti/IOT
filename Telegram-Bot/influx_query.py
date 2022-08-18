@@ -25,7 +25,8 @@ def fun_report(bucket):
   df = []
   for table in fun_result:
       for record in table.records:
-        df.append(record.get_value())
+        if('00:00:00+00:00' not in str(record['_time'])): #La query influx ha un problema col fuso orario e salva i dati sia alle 00:00 che all'orario in cui la query è stata lanciata
+          df.append(record.get_value())
   return df
 
 
