@@ -17,6 +17,7 @@ from pandas.tseries.offsets import DateOffset
 from datetime import datetime
 from statsmodels.graphics import tsaplots
 import numpy as np
+#import pickle
 bucket = 'IoT-sensor'
 org = 'IoT'
 token = 'sqnivYR104DFOVkJRUZd0FCzsKAhDobdVvw3tOtulrqyiTe-jnUbNiXJmIHq49atiF2zXk2mFQUC_kZJeA_AuQ=='
@@ -31,7 +32,7 @@ client = influxdb_client.InfluxDBClient(
 query_api = client.query_api()
 
 query = 'from(bucket: "IoT-sensor")\
-  |> range(start: 2022-07-04T18:00:00Z, stop: 2022-07-04T20:30:00Z)\
+  |> range(start: 2022-07-04T18:00:00Z, stop: 2022-07-04T19:50:00Z)\
   |> filter(fn: (r) => r["_measurement"] == "sensor")\
   |> filter(fn: (r) => r["_field"] == "temperature")\
   |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
@@ -85,19 +86,19 @@ import statsmodels.api as sm
 acf, ci = sm.tsa.acf(train_new, alpha=0.05)
 pacf, ci = sm.tsa.pacf(train_new, alpha=0.05)
 
-
+"""
 from pmdarima import auto_arima
 stepwise_fit=auto_arima(df['y'],trace=True,suppress_warning=True)
 print(stepwise_fit.summary())
 auto_order=stepwise_fit.get_params().get("order")
-
+"""
 history = [x for x in train]
 predictions = list()
 time=list()
 
 for t in test.index:
-  #ARIMA(p,q,d)
-  model = ARIMA(history, order=(1,1,2))##########################################################################################
+  #ARIMA(p,d,q)
+  model = ARIMA(history, order=(1,1,1))##########################################################################################
   model_fit = model.fit()
   output = model_fit.forecast()
   yest = output[0]
@@ -136,7 +137,7 @@ fig.savefig('2_expected_predicted.pdf')
 datetime_object = datetime.strptime(df.iloc[-1]['ds'], '%Y-%m-%d %H:%M:%S')
 df_pred=[datetime_object + DateOffset(minutes=x)for x in range(1,10)]
 
-tm=pd.Series(df_pred)
+tm=pd.Series(df_pred).dt.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 df_pred=pd.DataFrame(columns=['ds','y','forecast'])
 df_pred['ds']=tm
@@ -193,13 +194,11 @@ plt.plot(df2, color='red')
 plt.savefig('test_forecast.pdf')
 
 
+print(type(tm))
 
+print(tm.tolist())
+print(tm.strftime('%Y-%m-%dT%H:%M:%SZ'))
 # print(model_fit.forecast(steps=500))
-from sklearn.metrics import r2_score
-print(yest.values)
-r2_score(test, predictions)
-print('Test R2: %.3f'% r2_score)
-print('Test RMSE: %.3f'% rmse)
 
 """ 
 # grid search ARIMA parameters for time series

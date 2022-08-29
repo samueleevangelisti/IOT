@@ -21,8 +21,6 @@ import pickle
 from time import time, sleep
 import statistics
 
-import math
-from sklearn.metrics import mean_squared_error
 def training(query):
     result = client.query_api().query(org=org, query=query)
 
@@ -64,12 +62,15 @@ def training(query):
         print ('%d), time=%s,predicted=%f, expected=%f' % (t,time2,yest, obs))
         
         
+    import math
+    from sklearn.metrics import mean_squared_error
 
     print('-'*40)
 
-    mse = mean_squared_error(test, predictions)
+    mse = math.mean_squared_error(test, predictions)
     print(' MSE: %.3f'% mse)
     
+
     rmse = math.sqrt(mean_squared_error(test, predictions))
     print(' RMSE: %.3f'% rmse)
     
@@ -86,15 +87,6 @@ def training(query):
 
     fig = expected_predicted.get_figure()
     fig.savefig('2_expected_predicted.pdf')
-        
-
-    datetime_object = datetime.strptime(df.iloc[-1]['ds'], '%Y-%m-%d %H:%M:%S')
-    df_pred=[datetime_object + DateOffset(minutes=x)for x in range(1,10)]
-
-    tm=pd.Series(df_pred).dt.strftime('%Y-%m-%dT%H:%M:%SZ')
-    with open('date.txt', 'w') as f:
-      f.write(tm)
-
     return model_fit
 
 
