@@ -8,7 +8,7 @@ const chromeLauncher = require('chrome-launcher');
 
 const config = JSON.parse(fs.readFileSync(path.join(__dirname, '../Dashboard/dashboard-service-config.json'), 'utf-8'));
 
-app.use(express.static(path.join(__dirname, config.client)));
+app.use(express.static(config.client));
 app.use(cors());
 app.use(express.json());
 
