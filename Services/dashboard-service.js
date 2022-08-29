@@ -6,19 +6,11 @@ const path = require('path');
 const axios = require('axios').default;
 const chromeLauncher = require('chrome-launcher');
 
-const sse = require('./sse');
-
 const config = JSON.parse(fs.readFileSync(path.join(__dirname, '../Dashboard/dashboard-service-config.json'), 'utf-8'));
 
 app.use(express.static(config.client));
 app.use(cors());
 app.use(express.json());
-
-app.get('/sse', (req, res) => {
-  console.log('[LOG ] GET /sse');
-  sse.init(res);
-  sse.sendEvent('connect', true);
-});
 
 app.post('/proxy', (req, res) => {
   console.log(`[LOG ] POST /proxy\n${JSON.stringify(req.body, null, 2)}`);

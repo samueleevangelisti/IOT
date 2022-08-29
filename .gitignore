@@ -4,6 +4,8 @@ HTTP/http-service-config.json
 
 Weather/weather-service-config.json
 
+Forecasting/forecasting-service-config.json
+
 Influx/influx-config.json
 
 Services/__pycache__

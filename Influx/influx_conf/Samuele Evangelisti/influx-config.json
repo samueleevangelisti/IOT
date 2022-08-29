@@ -4,10 +4,14 @@
   "organization": "IoT",
   "bucket": {
     "sensor": "IoT-sensor",
-    "weather": "IoT-weather",
+    "weather": "IoT-weather"
+  },
+  "measurement": {
+    "sensor": "sensor",
+    "weather": "weather",
     "forecasting": {
-      "arima": "IoT-forecasting-arima",
-      "prophet": "IoT-forecasting-prophet"
+      "arima": "forecasting-arima",
+      "prohpet": "forecasting-prophet"
     }
   }
 }

@@ -10,8 +10,8 @@ void communication_init() {
 
 // gestione delle chiamate da evadere
 void communication_loop() {
-  mqtt.loop();
-  coap.loop();
+  mqtt_loop();
+  coap_loop();
   http_loop();
 }
 

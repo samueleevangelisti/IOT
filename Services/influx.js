@@ -14,7 +14,7 @@ module.exports = {
     console.log('INFLUX -> [WAIT] write sensor');
     try {
       let dataArr = dataStr.split('|');
-      let point = new Point('sensor')
+      let point = new Point(this._config.measurement.sensor)
         .tag('id', dataArr[0])
         .tag('latitude', dataArr[1])
         .tag('longitude', dataArr[2])
@@ -25,7 +25,7 @@ module.exports = {
         .floatField('humidity', dataArr[7])
         .intField('gas', dataArr[8])
         .intField('aqi', dataArr[9]);
-      const writeApi = this._influxdb.getWriteApi(config.organization, this._config.bucket.sensor);
+      const writeApi = this._influxdb.getWriteApi(this._config.organization, this._config.bucket.sensor);
       writeApi.writePoint(point);
       writeApi.close()
         .then((result) => {
@@ -33,9 +33,11 @@ module.exports = {
         })
         .catch((error) => {
           console.log('INFLUX -> [ERR ] write sensor');
+          console.log(error);
         });
     } catch(error) {
       console.log('INFLUX -> [ERR ] write sensor');
+      console.log(error);
     }
   }
 };
