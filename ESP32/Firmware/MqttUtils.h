@@ -52,4 +52,9 @@ void mqtt_publish() {
   }
 }
 
+// gestione delle chiamate da evadere
+void mqtt_loop() {
+  mqtt.loop();
+}
+
 #endif

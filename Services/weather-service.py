@@ -44,11 +44,6 @@ while True:
     print(hourly)
     # salvataggio rilevazione attuale
     point_dict = dict({
-        'measurement': 'weather',
-        'tags': dict({
-            'latitude': config['latitude'],
-            'longitude': config['longitude']
-        }),
         'fields': dict({
             'temperature': hourly['temp'][0]
         })

@@ -35,4 +35,9 @@ void coap_send() {
   }
 }
 
+// gestione delle chiamate da evadere
+void coap_loop() {
+  coap.loop();
+}
+
 #endif
