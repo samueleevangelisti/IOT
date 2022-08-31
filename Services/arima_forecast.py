@@ -5,6 +5,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 #from influx import Influx
 import csv
 import pandas as pd
+import os.path
 
 bucket = 'IoT-sensor'
 org = 'IoT'
@@ -30,30 +31,30 @@ print(len(date))
 
 id = input("Enter ESP32 id (ESP32_eva):   ")
 
-import os.path
-
 file_exists = os.path.exists(''+id+'_model_temperature.pkl')
 
-print(file_exists)
+if(file_exists==True):
+   pickled_model = pickle.load(open(''+id+'_model_temperature.pkl', 'rb'))
+   forecast_temperature=pickled_model.forecast(steps=10)
 
-pickled_model = pickle.load(open(''+id+'_model_temperature.pkl', 'rb'))
-forecast_temperature=pickled_model.forecast(steps=10)
+   pickled_model = pickle.load(open(''+id+'_model_humidity.pkl', 'rb'))
+   forecast_humidity=pickled_model.forecast(steps=10)
 
-pickled_model = pickle.load(open(''+id+'_model_humidity.pkl', 'rb'))
-forecast_humidity=pickled_model.forecast(steps=10)
-
-pickled_model = pickle.load(open(''+id+'_model_gas.pkl', 'rb'))
-forecast_gas=pickled_model.forecast(steps=10)
-
-#TEMPERATURE
-for i, item in enumerate(forecast_temperature):
-   point_dict = dict({
-      'time': date[i],
-      'measurement': 'forecasting',
-      'fields': dict({
-            'temperature': forecast_temperature[i],
-            'humidity': forecast_humidity[i],
-            'gas': forecast_gas[i]
+   pickled_model = pickle.load(open(''+id+'_model_gas.pkl', 'rb'))
+   forecast_gas=pickled_model.forecast(steps=10)
+   
+   #TEMPERATURE
+   for i, item in enumerate(forecast_temperature):
+      point_dict = dict({
+         'time': date[i],
+         'measurement': 'forecasting',
+         'fields': dict({
+               'temperature': forecast_temperature[i],
+               'humidity': forecast_humidity[i],
+               'gas': forecast_gas[i]
+         })
       })
-   })
-   #influx.write_forecasting_arima(point_dict)
+      #influx.write_forecasting_arima(point_dict)
+
+else:
+   print('This ID is not registered')
