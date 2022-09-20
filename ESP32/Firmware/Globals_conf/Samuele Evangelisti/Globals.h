@@ -28,7 +28,7 @@ IPAddress COAP_SERVER(192, 168, 1, 2); // ip del server coap
 char COAP_URL[20] = "sensor"; // url per l'identificazione dei dati
 
 int HTTP_PORT = 80; // porta a cui è aperta la comunicazione con ESP32
-char HTTP_SEND_URL[50]; // url per l'invio dei dati
+char HTTP_SEND_URL[50] = "http://192.168.1.2:8080/send"; // url per l'invio dei dati
 
 int wifi_rssi; // RSSI rilevato
 int wifi_packet_sent = 0; // pacchetti inviati dall'ultima ricezione corretta
