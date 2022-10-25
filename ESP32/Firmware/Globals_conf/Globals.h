@@ -7,28 +7,28 @@ int PIN_MQ2_AO = 34; // pin analogico MQ-2
 int PIN_MQ2_DO = 35; // pin digitale MQ-2
 
 char* WIFI_AP_PASSWORD = "123456789"; // password dell'access point
-char WIFI_SSID[100] = "TIM-32867173"; // nome della rete wifi
-char WIFI_PASSWORD[100] = "rbRWGmRFlmsXN3GulwBXByaG"; // password della rete wifi
+char WIFI_SSID[101] = ""; // nome della rete wifi
+char WIFI_PASSWORD[101] = ""; // password della rete wifi
 
-char ESP32_ID[20] = "ESP32_eva"; // id del dispositivo
-float ESP32_LATITUDE = 43.777734; // latitudine del dispositivo
-float ESP32_LONGITUDE = 12.941052; // longitudine del dispositivo
+char ESP32_ID[21] = "ESP32_new_conn"; // id del dispositivo
+float ESP32_LATITUDE; // latitudine del dispositivo
+float ESP32_LONGITUDE; // longitudine del dispositivo
 
 int SAMPLE_FREQUENCY = 2000; // frequenza di campionamento. DHT11 sampling rate is 1HZ.
 int MIN_GAS_VALUE = 200; // valore minimo del gas
 int MAX_GAS_VALUE = 10000; // valore massimo del gas
 int COMMUNICATION_PROTOCOL = 0; // protocollo di comunicazione, 0: MQTT, 1: COAP, 2: HTTP
 
-char MQTT_SERVER[15] = "192.168.1.2"; // ip del server mqtt
-char MQTT_USER[20] = "IoT"; // user per mqtt
-char MQTT_PASSWORD[20] = "IoT"; // password per mqtt
-char MQTT_TOPIC[20] = "sensor"; // topic per l'invio dei dati
+char MQTT_SERVER[16] = ""; // ip del server mqtt
+char MQTT_USER[21] = ""; // user per mqtt
+char MQTT_PASSWORD[21] = ""; // password per mqtt
+char MQTT_TOPIC[21] = ""; // topic per l'invio dei dati
 
-IPAddress COAP_SERVER(192, 168, 1, 2); // ip del server coap
-char COAP_URL[20] = "sensor"; // url per l'identificazione dei dati
+IPAddress COAP_SERVER(127, 0, 0, 1); // ip del server coap
+char COAP_URL[21] = ""; // url per l'identificazione dei dati
 
 int HTTP_PORT = 80; // porta a cui è aperta la comunicazione con ESP32
-char HTTP_SEND_URL[50] = "http://192.168.1.2:8080/send"; // url per l'invio dei dati
+char HTTP_SEND_URL[51] = ""; // url per l'invio dei dati
 
 int wifi_rssi; // RSSI rilevato
 int wifi_packet_sent = 0; // pacchetti inviati dall'ultima ricezione corretta
@@ -67,7 +67,7 @@ String get_dashboard_json() {
     + String("\"MQTT_TOPIC\":\"") + String(MQTT_TOPIC) + String("\",")
     + String("\"COAP_SERVER\":\"") + COAP_SERVER.toString() + String("\",")
     + String("\"COAP_URL\":\"") + String(COAP_URL) + String("\",")
-    + String("\"HTTP_PORT\":\"") + String(HTTP_PORT) + String("\"")
+    + String("\"HTTP_PORT\":\"") + String(HTTP_PORT) + String("\",")
     + String("\"HTTP_SEND_URL\":\"") + String(HTTP_SEND_URL) + String("\"")
   + String("}");
 }

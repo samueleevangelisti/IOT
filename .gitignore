@@ -1,3 +1,5 @@
+ESP32/Firmware/Globals.h
+
 MQTT/mqtt-service-config.json
 
 HTTP/http-service-config.json
