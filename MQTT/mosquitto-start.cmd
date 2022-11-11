@@ -1,1 +1,1 @@
-mosquitto -c mosquitto.conf
+mosquitto -c mosquitto.conf -v

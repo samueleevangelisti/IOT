@@ -23,8 +23,8 @@ class Influx:
     def write_weather(self, point_dict):
         print('INFLUX -> [WAIT] write weather')
         try:
-            pint_dict['measurement'] = self.influx_config['measurement']['weather']
-            pint_dict['tags'] = self.weather_config
+            point_dict['measurement'] = self.influx_config['measurement']['weather']
+            point_dict['tags'] = self.weather_config
             self.write_api.write(bucket=self.influx_config['bucket']['weather'], org=self.influx_config['organization'], record=point_dict)
             print('INFLUX -> [OK  ] write weather')
         except:
@@ -33,9 +33,9 @@ class Influx:
     def write_forecasting_arima(self, point_dict):
         print('INFLUX -> [WAIT] write forecasting arima')
         try:
-            pint_dict['measurement'] = self.influx_config['measurement']['forecasting']['arima']
-            pint_dict['tags'] = self.forecasting_config
-            self.write_api.write(bucket=self.influx_config['bucket']['forecasting']['arima'], org=self.influx_config['organization'], record=point_dict)
+            point_dict['measurement'] = self.influx_config['measurement']['forecasting']['arima']
+            point_dict['tags'] = self.forecasting_config
+            self.write_api.write(bucket=self.influx_config['bucket']['sensor'], org=self.influx_config['organization'], record=point_dict)
             print('INFLUX -> [OK  ] write forecasting arima')
         except:
             print('INFLUX -> [ERR ] write forecasting arima')
@@ -43,9 +43,9 @@ class Influx:
     def write_forecasting_prohpet(self, point_dict):
         print('INFLUX -> [WAIT] write forecasting prophet')
         try:
-            pint_dict['measurement'] = self.influx_config['measurement']['forecasting']['prophet']
-            pint_dict['tags'] = self.forecasting_config
-            self.write_api.write(bucket=self.influx_config['bucket']['forecasting']['prophet'], org=self.influx_config['organization'], record=point_dict)
+            point_dict['measurement'] = self.influx_config['measurement']['forecasting']['prophet']
+            point_dict['tags'] = self.forecasting_config
+            self.write_api.write(bucket=self.influx_config['bucket']['sensor'], org=self.influx_config['organization'], record=point_dict)
             print('INFLUX -> [OK  ] write forecasting prophet')
         except:
             print('INFLUX -> [ERR ] write forecasting prophet')
