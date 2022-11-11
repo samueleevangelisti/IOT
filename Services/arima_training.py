@@ -64,9 +64,9 @@ def training(query):
         print ('%d), time=%s,predicted=%f, expected=%f' % (t,time2,yest, obs))
         
         
+        
 
     print('-'*40)
-
     mse = mean_squared_error(test, predictions)
     print(' MSE: %.3f'% mse)
     
@@ -136,13 +136,13 @@ while True:
     |> filter(fn: (r) => r["_field"] == "gas")\
     |> filter(fn: (r) => r["id"] == "'+id+'")\
     |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
-
+  print('TEMPERATURE ------------------------------')
   model_temperature = training(query_temperature)
   pickle.dump(model_temperature, open(''+id+'_model_temperature.pkl', 'wb'))
-
+  print('HUMIDITY ------------------------------')
   model_humidity = training(query_humidity)
   pickle.dump(model_humidity, open(''+id+'_model_humidity.pkl', 'wb'))
-
+  print('GAS ------------------------------')
   model_gas = training(query_gas)
   pickle.dump(model_gas, open(''+id+'_model_gas.pkl', 'wb'))
 
