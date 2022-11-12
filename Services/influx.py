@@ -16,9 +16,20 @@ class Influx:
         self.forecasting_config = json.load(f)
         f.close()
         self.client = InfluxDBClient(url=self.influx_config['url'], token=self.influx_config['token'], org=self.influx_config['organization'])
-        self.write_api = self.client.write_api(write_options=SYNCHRONOUS)
         self.query_api = self.client.query_api()
+        self.write_api = self.client.write_api(write_options=SYNCHRONOUS)
         self.delete_api = self.client.delete_api()
+
+    def query(self, query):
+        print('INFLUX -> [WAIT] query')
+        try:
+            row_list = self.query_api.query(org=self.influx_config['organization'], query=query)
+            print('INFLUX -> [OK  ] query')
+            return row_list
+        except Exception as e:
+            print('INFLUX -> [ERR ] query')
+            print(e)
+            return None
 
     def write_weather(self, point_dict):
         print('INFLUX -> [WAIT] write weather')
@@ -27,8 +38,9 @@ class Influx:
             point_dict['tags'] = self.weather_config
             self.write_api.write(bucket=self.influx_config['bucket']['weather'], org=self.influx_config['organization'], record=point_dict)
             print('INFLUX -> [OK  ] write weather')
-        except:
+        except Exception as e:
             print('INFLUX -> [ERR ] write weather')
+            print(e)
 
     def write_forecasting_arima(self, point_dict):
         print('INFLUX -> [WAIT] write forecasting arima')
@@ -37,8 +49,9 @@ class Influx:
             point_dict['tags'] = self.forecasting_config
             self.write_api.write(bucket=self.influx_config['bucket']['sensor'], org=self.influx_config['organization'], record=point_dict)
             print('INFLUX -> [OK  ] write forecasting arima')
-        except:
+        except Exception as e:
             print('INFLUX -> [ERR ] write forecasting arima')
+            print(e)
 
     def write_forecasting_prophet(self, point_dict):
         print('INFLUX -> [WAIT] write forecasting prophet')
@@ -47,8 +60,9 @@ class Influx:
             point_dict['tags'] = self.forecasting_config
             self.write_api.write(bucket=self.influx_config['bucket']['sensor'], org=self.influx_config['organization'], record=point_dict)
             print('INFLUX -> [OK  ] write forecasting prophet')
-        except:
+        except Exception as e:
             print('INFLUX -> [ERR ] write forecasting prophet')
+            print(e)
 
     def delete_forecasting_arima_all(self):
         print('INFLUX -> [WAIT] delete forecasting arima')
