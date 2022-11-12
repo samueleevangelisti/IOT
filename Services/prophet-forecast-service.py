@@ -12,7 +12,9 @@ from time import time, sleep
 import math
 from sklearn.metrics import mean_squared_error
 import statistics
+import influx
 
+influx = influx.Influx()
 bucket = 'IoT-sensor'
 org = 'IoT'
 token = 'WOqKy-gIeRs9U-IlbEzZdLZcTZHpwPsx2NpibTGWbYFq_IuDZVEAcMZ1VtrYKnjFEjs2vsQJl6H2vvXvfClfPw=='
@@ -78,6 +80,8 @@ def training(query):
     
     date=forecast['ds'].iloc[-p:]
     print(date.dt.strftime('%Y-%m-%dT%H:%M:%SZ'))
+
+    return forecast.iloc[-p:]
     """
     datetime_object = datetime.strptime(df.iloc[-1]['ds'], '%Y-%m-%d %H:%M:%S')
     df_pred=[datetime_object + DateOffset(minutes=x)for x in range(1,11)]
@@ -106,10 +110,20 @@ while True:
 
   model_temperature = training(query_temperature)
 
-
   model_humidity = training(query_humidity)
 
-
   model_gas = training(query_gas)
+
+  for i, item in enumerate(model_temperature['yhat']):
+      point_dict = dict({
+         'time': model_temperature['ds'].iloc[i].isoformat() + 'Z',
+         'fields': dict({
+               'temperature': model_temperature['yhat'].iloc[i],
+               'humidity': model_humidity['yhat'].iloc[i],
+               'gas': model_gas['yhat'].iloc[i]
+         })
+      })
+      print(point_dict)
+      influx.write_forecasting_prophet(point_dict)
 
   sleep(60 - time() % 60)

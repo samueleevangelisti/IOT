@@ -40,7 +40,7 @@ class Influx:
         except:
             print('INFLUX -> [ERR ] write forecasting arima')
 
-    def write_forecasting_prohpet(self, point_dict):
+    def write_forecasting_prophet(self, point_dict):
         print('INFLUX -> [WAIT] write forecasting prophet')
         try:
             point_dict['measurement'] = self.influx_config['measurement']['forecasting']['prophet']

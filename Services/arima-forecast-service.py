@@ -55,14 +55,12 @@ if(file_exists==True):
    for i, item in enumerate(forecast_temperature):
       point_dict = dict({
          'time': date[i],
-         'measurement': 'forecasting',
          'fields': dict({
                'temperature': forecast_temperature[i],
                'humidity': forecast_humidity[i],
                'gas': forecast_gas[i]
          })
       })
-      #influx.write_forecasting_arima(point_dict)
       print(point_dict)
       influx.write_forecasting_arima(point_dict)
    
