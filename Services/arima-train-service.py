@@ -103,7 +103,7 @@ def training(query):
 
 bucket = 'IoT-sensor'
 org = 'IoT'
-token = 'sqnivYR104DFOVkJRUZd0FCzsKAhDobdVvw3tOtulrqyiTe-jnUbNiXJmIHq49atiF2zXk2mFQUC_kZJeA_AuQ=='
+token = 'WOqKy-gIeRs9U-IlbEzZdLZcTZHpwPsx2NpibTGWbYFq_IuDZVEAcMZ1VtrYKnjFEjs2vsQJl6H2vvXvfClfPw=='
 url='http://localhost:8086'
 
 client = influxdb_client.InfluxDBClient(
@@ -117,21 +117,21 @@ id = input("Enter ESP32 id: (ESP32_eva)")
 while True:
   test='temperature'
   query_temperature = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-04T18:00:00Z, stop: 2022-07-04T19:50:00Z)\
+    |> range(start: 2022-07-04T18:00:00Z)\
     |> filter(fn: (r) => r["_measurement"] == "sensor")\
     |> filter(fn: (r) => r["_field"] == "temperature")\
     |> filter(fn: (r) => r["id"] == "'+id+'")\
     |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
 
   query_humidity = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-04T18:00:00Z, stop: 2022-07-04T19:50:00Z)\
+    |> range(start: 2022-07-04T18:00:00Z)\
     |> filter(fn: (r) => r["_measurement"] == "sensor")\
     |> filter(fn: (r) => r["_field"] == "humidity")\
     |> filter(fn: (r) => r["id"] == "'+id+'")\
     |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
 
   query_gas = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-04T18:00:00Z, stop: 2022-07-04T19:50:00Z)\
+    |> range(start: 2022-07-04T18:00:00Z)\
     |> filter(fn: (r) => r["_measurement"] == "sensor")\
     |> filter(fn: (r) => r["_field"] == "gas")\
     |> filter(fn: (r) => r["id"] == "'+id+'")\

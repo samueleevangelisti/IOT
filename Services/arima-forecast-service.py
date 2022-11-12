@@ -11,7 +11,7 @@ import os.path
 
 bucket = 'IoT-sensor'
 org = 'IoT'
-token = '996mqBkUkAAnmEBU-l3WKyzl4AXfPVhdeGWPhIJBR79k6LNpeP1rRGqiWuw8dqzXbHZUL7H9wcHMLKu4auclyg=='
+token = 'WOqKy-gIeRs9U-IlbEzZdLZcTZHpwPsx2NpibTGWbYFq_IuDZVEAcMZ1VtrYKnjFEjs2vsQJl6H2vvXvfClfPw=='
 url='http://localhost:8086'
 
 
@@ -64,8 +64,7 @@ if(file_exists==True):
       })
       #influx.write_forecasting_arima(point_dict)
       print(point_dict)
-   
-   influx.write_forecasting_arima(point_dict)
+      influx.write_forecasting_arima(point_dict)
    
 
 else:

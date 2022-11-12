@@ -26,6 +26,8 @@ while True:
     print('[LOG ] utc/locale timedelta: {}'.format(utc_locale_timedelta))
     # stazione meteo
     station = Stations().nearby(config['latitude'], config['longitude']).fetch(1)
+    print('[LOG ] station')
+    print(station)
     # differenza della stazione rispetto a UTC
     utc_station_timedelta = timezone(station['timezone'].values[0]).utcoffset(utc_datetime)
     print('[LOG ] utc/station timedelta: {}'.format(utc_station_timedelta))

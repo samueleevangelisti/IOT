@@ -15,7 +15,7 @@ import statistics
 
 bucket = 'IoT-sensor'
 org = 'IoT'
-token = 'sqnivYR104DFOVkJRUZd0FCzsKAhDobdVvw3tOtulrqyiTe-jnUbNiXJmIHq49atiF2zXk2mFQUC_kZJeA_AuQ=='
+token = 'WOqKy-gIeRs9U-IlbEzZdLZcTZHpwPsx2NpibTGWbYFq_IuDZVEAcMZ1VtrYKnjFEjs2vsQJl6H2vvXvfClfPw=='
 # Store the URL of your InfluxDB instance
 url='http://localhost:8086'
 client = influxdb_client.InfluxDBClient(
@@ -53,7 +53,7 @@ def training(query):
     #fig1.show()
 
 
-    predicted = forecast['yhat'].iloc[:-p].values
+    predicted = forecast['yhat'].iloc[:-p + 1].values
     expected = df['y'].values
 
 
@@ -87,19 +87,19 @@ def training(query):
 
 while True:
   query_temperature = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-04T18:00:00Z, stop: 2022-07-04T19:50:00Z)\
+    |> range(start: 2022-07-04T18:00:00Z)\
     |> filter(fn: (r) => r["_measurement"] == "sensor")\
     |> filter(fn: (r) => r["_field"] == "temperature")\
     |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
 
   query_humidity = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-04T18:00:00Z, stop: 2022-07-04T19:50:00Z)\
+    |> range(start: 2022-07-04T18:00:00Z)\
     |> filter(fn: (r) => r["_measurement"] == "sensor")\
     |> filter(fn: (r) => r["_field"] == "humidity")\
     |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
 
   query_gas = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-04T18:00:00Z, stop: 2022-07-04T19:50:00Z)\
+    |> range(start: 2022-07-04T18:00:00Z)\
     |> filter(fn: (r) => r["_measurement"] == "sensor")\
     |> filter(fn: (r) => r["_field"] == "gas")\
     |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
