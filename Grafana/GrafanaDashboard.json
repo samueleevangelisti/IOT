@@ -24,15 +24,12 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "_n-6ckqnk"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -87,7 +84,7 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 9,
+        "w": 8,
         "x": 0,
         "y": 0
       },
@@ -118,16 +115,27 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "_n-6ckqnk"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "index": 1,
+                  "text": "Bad"
+                },
+                "1": {
+                  "index": 0,
+                  "text": "Good"
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -137,17 +145,22 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 1
               }
             ]
-          }
+          },
+          "unit": "bool_yes_no"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 7,
         "w": 3,
-        "x": 9,
+        "x": 8,
         "y": 0
       },
       "id": 18,
@@ -165,7 +178,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.0",
+      "pluginVersion": "9.2.4",
       "targets": [
         {
           "datasource": {
@@ -180,7 +193,10 @@
       "type": "stat"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "type": "influxdb",
+        "uid": "VQCdPCD4z"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -202,7 +218,7 @@
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
-            "pointSize": 5,
+            "pointSize": 8,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -235,8 +251,8 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 9,
-        "x": 12,
+        "w": 7,
+        "x": 11,
         "y": 0
       },
       "id": 10,
@@ -258,7 +274,7 @@
             "type": "influxdb",
             "uid": "DXEN7benk"
           },
-          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\" or r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -266,16 +282,15 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "_n-6ckqnk"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "mappings": [],
+          "max": 100000,
+          "min": 200,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -285,24 +300,22 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 400
               }
             ]
-          }
+          },
+          "unit": "ppm"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 7,
         "w": 3,
-        "x": 21,
+        "x": 18,
         "y": 0
       },
       "id": 16,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -311,9 +324,10 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
       },
-      "pluginVersion": "9.2.0",
+      "pluginVersion": "9.2.4",
       "targets": [
         {
           "datasource": {
@@ -325,100 +339,12 @@
         }
       ],
       "title": "Gas last value",
-      "type": "stat"
-    },
-    {
-      "datasource": {},
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 9,
-        "x": 0,
-        "y": 7
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "DXEN7benk"
-          },
-          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "title": "Temperature",
-      "transformations": [],
-      "type": "timeseries"
+      "type": "gauge"
     },
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "_n-6ckqnk"
+        "uid": "VQCdPCD4z"
       },
       "fieldConfig": {
         "defaults": {
@@ -426,6 +352,8 @@
             "mode": "thresholds"
           },
           "mappings": [],
+          "max": 100000,
+          "min": 200,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -435,158 +363,11 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 400
               }
             ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 3,
-        "x": 9,
-        "y": 7
-      },
-      "id": 17,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "DXEN7benk"
           },
-          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\r\n  |> last()",
-          "refId": "A"
-        }
-      ],
-      "title": "Temperature last value",
-      "type": "stat"
-    },
-    {
-      "datasource": {},
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 9,
-        "x": 12,
-        "y": 7
-      },
-      "id": 12,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "DXEN7benk"
-          },
-          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
-          "refId": "A"
-        }
-      ],
-      "title": "Humidity",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "_n-6ckqnk"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
+          "unit": "ppm"
         },
         "overrides": []
       },
@@ -594,13 +375,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 7
+        "y": 0
       },
-      "id": 14,
+      "id": 24,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -609,21 +387,22 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
       },
-      "pluginVersion": "9.2.0",
+      "pluginVersion": "9.2.4",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
             "uid": "DXEN7benk"
           },
-          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\r\n  |> last()",
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas\")\r\n  |> last()",
           "refId": "A"
         }
       ],
-      "title": "Humidity last value",
-      "type": "stat"
+      "title": "Forecasting Gas value",
+      "type": "gauge"
     },
     {
       "datasource": {},
@@ -681,9 +460,9 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 9,
-        "x": 6,
-        "y": 14
+        "w": 8,
+        "x": 0,
+        "y": 7
       },
       "id": 8,
       "options": {
@@ -712,14 +491,124 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "_n-6ckqnk"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 0,
+          "min": -100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "dark-red",
+                "value": -100
+              },
+              {
+                "color": "dark-red",
+                "value": -90
+              },
+              {
+                "color": "red",
+                "value": -80
+              },
+              {
+                "color": "dark-orange",
+                "value": -70
+              },
+              {
+                "color": "yellow",
+                "value": -67
+              },
+              {
+                "color": "green",
+                "value": -30
+              }
+            ]
+          },
+          "unit": "dBm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 8,
+        "y": 7
+      },
+      "id": 15,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.2.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "DXEN7benk"
+          },
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rssi\")\r\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "RSSI last value",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "VQCdPCD4z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -740,15 +629,71 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 3,
-        "x": 15,
-        "y": 14
+        "w": 7,
+        "x": 11,
+        "y": 7
       },
-      "id": 15,
+      "id": 12,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "DXEN7benk"
+          },
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\" or r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Humidity",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {},
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 90,
+          "min": 20,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 70
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 18,
+        "y": 7
+      },
+      "id": 14,
+      "options": {
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -757,24 +702,371 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
       },
-      "pluginVersion": "9.2.0",
+      "pluginVersion": "9.2.4",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
             "uid": "DXEN7benk"
           },
-          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rssi\")\r\n  |> last()",
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\r\n  |> last()",
           "refId": "A"
         }
       ],
-      "title": "RSSI last value",
-      "type": "stat"
+      "title": "Humidity last value",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "VQCdPCD4z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 90,
+          "min": 20,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 70
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 21,
+        "y": 7
+      },
+      "id": 23,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "9.2.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "DXEN7benk"
+          },
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\r\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "Forecasting Humidity value",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "VQCdPCD4z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 50
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 9,
+        "x": 3,
+        "y": 14
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "DXEN7benk"
+          },
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\" or r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "title": "Temperature",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "VQCdPCD4z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 50,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 30
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 12,
+        "y": 14
+      },
+      "id": 17,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.2.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "DXEN7benk"
+          },
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\r\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "Temperature last value",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "VQCdPCD4z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 50,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 30
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 15,
+        "y": 14
+      },
+      "id": 22,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "9.2.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "DXEN7benk"
+          },
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\r\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "Forecasting Temperature value",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "VQCdPCD4z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 50,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 30
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 18,
+        "y": 14
+      },
+      "id": 21,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.2.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "DXEN7benk"
+          },
+          "query": "from(bucket: \"IoT-weather\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"weather\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\r\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "Weather Temperature value",
+      "type": "gauge"
     }
   ],
-  "refresh": "5s",
+  "refresh": false,
   "schemaVersion": 37,
   "style": "dark",
   "tags": [],
@@ -782,13 +1074,13 @@
     "list": []
   },
   "time": {
-    "from": "now-1y",
-    "to": "now"
+    "from": "2022-07-03T22:00:00.000Z",
+    "to": "2022-07-08T21:59:59.000Z"
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Sensor-Temperature",
-  "uid": "Z1H5nxe7k",
-  "version": 1,
+  "title": "Sensor-Temperature Copy",
+  "uid": "ff7TsqDVz",
+  "version": 4,
   "weekStart": ""
 }
