@@ -75,7 +75,11 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 0
+              },
+              {
+                "color": "dark-green",
+                "value": 1
               }
             ]
           }
@@ -233,6 +237,7 @@
             }
           },
           "mappings": [],
+          "min": 200,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -242,7 +247,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 1000
               }
             ]
           }
@@ -300,7 +305,7 @@
               },
               {
                 "color": "red",
-                "value": 400
+                "value": 1000
               }
             ]
           },
@@ -363,7 +368,7 @@
               },
               {
                 "color": "red",
-                "value": 400
+                "value": 1000
               }
             ]
           },
@@ -405,7 +410,10 @@
       "type": "gauge"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "type": "influxdb",
+        "uid": "VQCdPCD4z"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +450,8 @@
             }
           },
           "mappings": [],
+          "max": 0,
+          "min": -100,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -450,11 +460,32 @@
                 "value": null
               },
               {
+                "color": "dark-red",
+                "value": -100
+              },
+              {
+                "color": "dark-red",
+                "value": -90
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": -80
+              },
+              {
+                "color": "dark-orange",
+                "value": -70
+              },
+              {
+                "color": "yellow",
+                "value": -67
+              },
+              {
+                "color": "green",
+                "value": -30
               }
             ]
-          }
+          },
+          "unit": "dBm"
         },
         "overrides": []
       },
@@ -464,7 +495,7 @@
         "x": 0,
         "y": 7
       },
-      "id": 8,
+      "id": 25,
       "options": {
         "legend": {
           "calcs": [],
@@ -477,6 +508,7 @@
           "sort": "none"
         }
       },
+      "pluginVersion": "9.2.4",
       "targets": [
         {
           "datasource": {
@@ -620,7 +652,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 70
               }
             ]
           }
@@ -668,7 +700,7 @@
           },
           "mappings": [],
           "max": 90,
-          "min": 20,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -732,7 +764,7 @@
           },
           "mappings": [],
           "max": 90,
-          "min": 20,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -834,7 +866,7 @@
               },
               {
                 "color": "red",
-                "value": 50
+                "value": 30
               }
             ]
           }
@@ -1081,6 +1113,6 @@
   "timezone": "",
   "title": "Sensor-Temperature Copy",
   "uid": "ff7TsqDVz",
-  "version": 4,
+  "version": 5,
   "weekStart": ""
 }
