@@ -22,8 +22,14 @@ from statsmodels.tsa.stattools import adfuller
 import csv
 import math
 from sklearn.metrics import mean_squared_error
+
+from influx import Influx
+
+influx = Influx()
+
 def training(query,name_file):
-    result = client.query_api().query(org=org, query=query)
+    # result = client.query_api().query(org=org, query=query)
+    result = influx.query(query=query)
     print(result)
     results = []
     for table in result:
@@ -113,54 +119,69 @@ def training(query,name_file):
 
     return model_fit
 
-bucket = 'IoT-sensor'
-org = 'IoT'
-#token = 'WOqKy-gIeRs9U-IlbEzZdLZcTZHpwPsx2NpibTGWbYFq_IuDZVEAcMZ1VtrYKnjFEjs2vsQJl6H2vvXvfClfPw=='
-token = '996mqBkUkAAnmEBU-l3WKyzl4AXfPVhdeGWPhIJBR79k6LNpeP1rRGqiWuw8dqzXbHZUL7H9wcHMLKu4auclyg=='
-url='http://localhost:8086'
+# bucket = 'IoT-sensor'
+# org = 'IoT'
+# #token = 'WOqKy-gIeRs9U-IlbEzZdLZcTZHpwPsx2NpibTGWbYFq_IuDZVEAcMZ1VtrYKnjFEjs2vsQJl6H2vvXvfClfPw=='
+# token = '996mqBkUkAAnmEBU-l3WKyzl4AXfPVhdeGWPhIJBR79k6LNpeP1rRGqiWuw8dqzXbHZUL7H9wcHMLKu4auclyg=='
+# url='http://localhost:8086'
 
-client = influxdb_client.InfluxDBClient(
-   url=url,
-   token=token,
-   org=org
-)
+# client = influxdb_client.InfluxDBClient(
+#    url=url,
+#    token=token,
+#    org=org
+# )
 
-query_api = client.query_api()
+# query_api = client.query_api()
 id = input("Enter ESP32 id: ")
 while True:
-  test='temperature'
-  query_temperature = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-06T13:00:00Z , stop:2022-07-07T02:00:00Z)\
+
+  id_query = 'from(bucket: "IoT-sensor")\
+    |> range(start: 2022-07-06T12:00:00Z)\
     |> filter(fn: (r) => r["_measurement"] == "sensor")\
     |> filter(fn: (r) => r["_field"] == "temperature")\
     |> filter(fn: (r) => r["id"] == "'+id+'")\
     |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
 
-  query_humidity = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-06T12:00:00Z , stop:2022-07-07T02:00:00Z)\
-    |> filter(fn: (r) => r["_measurement"] == "sensor")\
-    |> filter(fn: (r) => r["_field"] == "humidity")\
-    |> filter(fn: (r) => r["id"] == "'+id+'")\
-    |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
+  # check_id=client.query_api().query(org=org, query=id_query)
+  check_id = influx.query(query=id_query)
+  
+  if not check_id:
+    print('ESP32 id not found')
+    break
+  else:
 
-  query_gas = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-06T12:00:00Z , stop:2022-07-07T02:00:00Z)\
-    |> filter(fn: (r) => r["_measurement"] == "sensor")\
-    |> filter(fn: (r) => r["_field"] == "gas")\
-    |> filter(fn: (r) => r["id"] == "'+id+'")\
-    |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
-  temperature="arima_temperature.jpg"
-  humidity="arima_humidity.jpg"
-  gas="arima_gas.jpg"
-  print('TEMPERATURE ------------------------------')
-  model_temperature = training(query_temperature,temperature)
-  pickle.dump(model_temperature, open(''+id+'_model_temperature.pkl', 'wb'))
-  print('HUMIDITY ------------------------------')
-  model_humidity = training(query_humidity,humidity)
-  pickle.dump(model_humidity, open(''+id+'_model_humidity.pkl', 'wb'))
-  print('GAS ------------------------------')
-  model_gas = training(query_gas,gas)
-  pickle.dump(model_gas, open(''+id+'_model_gas.pkl', 'wb'))
+    query_temperature = 'from(bucket: "IoT-sensor")\
+      |> range(start: 2022-07-06T13:00:00Z)\
+      |> filter(fn: (r) => r["_measurement"] == "sensor")\
+      |> filter(fn: (r) => r["_field"] == "temperature")\
+      |> filter(fn: (r) => r["id"] == "'+id+'")\
+      |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
+
+    query_humidity = 'from(bucket: "IoT-sensor")\
+      |> range(start: 2022-07-06T12:00:00Z)\
+      |> filter(fn: (r) => r["_measurement"] == "sensor")\
+      |> filter(fn: (r) => r["_field"] == "humidity")\
+      |> filter(fn: (r) => r["id"] == "'+id+'")\
+      |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
+
+    query_gas = 'from(bucket: "IoT-sensor")\
+      |> range(start: 2022-07-06T12:00:00Z)\
+      |> filter(fn: (r) => r["_measurement"] == "sensor")\
+      |> filter(fn: (r) => r["_field"] == "gas")\
+      |> filter(fn: (r) => r["id"] == "'+id+'")\
+      |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
+    temperature="arima_temperature.jpg"
+    humidity="arima_humidity.jpg"
+    gas="arima_gas.jpg"
+    print('TEMPERATURE ------------------------------')
+    model_temperature = training(query_temperature,temperature)
+    pickle.dump(model_temperature, open(''+id+'_model_temperature.pkl', 'wb'))
+    print('HUMIDITY ------------------------------')
+    model_humidity = training(query_humidity,humidity)
+    pickle.dump(model_humidity, open(''+id+'_model_humidity.pkl', 'wb'))
+    print('GAS ------------------------------')
+    model_gas = training(query_gas,gas)
+    pickle.dump(model_gas, open(''+id+'_model_gas.pkl', 'wb'))
 
   sleep(120 - time() % 120)
 

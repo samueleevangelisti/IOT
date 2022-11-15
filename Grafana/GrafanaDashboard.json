@@ -24,12 +24,15 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 5,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": {},
+      "datasource": {
+        "type": "influxdb",
+        "uid": "_n-6ckqnk"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -182,7 +185,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -199,7 +202,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "VQCdPCD4z"
+        "uid": "_n-6ckqnk"
       },
       "fieldConfig": {
         "defaults": {
@@ -279,7 +282,7 @@
             "type": "influxdb",
             "uid": "DXEN7benk"
           },
-          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\" or r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\" or r[\"_measurement\"] == \"forecasting-arima\" or r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -332,7 +335,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -347,10 +350,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "VQCdPCD4z"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -395,7 +395,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -410,10 +410,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "VQCdPCD4z"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -588,7 +585,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -605,7 +602,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "VQCdPCD4z"
+        "uid": "_n-6ckqnk"
       },
       "fieldConfig": {
         "defaults": {
@@ -684,7 +681,7 @@
             "type": "influxdb",
             "uid": "DXEN7benk"
           },
-          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\" or r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\" or r[\"_measurement\"] == \"forecasting-arima\" or r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -738,7 +735,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -753,10 +750,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "VQCdPCD4z"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -802,7 +796,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -819,7 +813,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "VQCdPCD4z"
+        "uid": "_n-6ckqnk"
       },
       "fieldConfig": {
         "defaults": {
@@ -898,7 +892,7 @@
             "type": "influxdb",
             "uid": "DXEN7benk"
           },
-          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\" or r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"IoT-sensor\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"forecasting-prophet\" or r[\"_measurement\"] == \"forecasting-arima\" or r[\"_measurement\"] == \"sensor\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\r\n  |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -908,10 +902,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "VQCdPCD4z"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -956,7 +947,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -971,10 +962,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "VQCdPCD4z"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1020,7 +1008,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -1035,10 +1023,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "VQCdPCD4z"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1083,7 +1068,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -1106,13 +1091,13 @@
     "list": []
   },
   "time": {
-    "from": "2022-07-03T22:00:00.000Z",
-    "to": "2022-07-08T21:59:59.000Z"
+    "from": "2022-11-11T22:07:35.927Z",
+    "to": "2022-11-11T23:31:24.947Z"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Sensor-Temperature Copy",
   "uid": "ff7TsqDVz",
-  "version": 5,
+  "version": 1,
   "weekStart": ""
 }
