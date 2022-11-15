@@ -13,11 +13,17 @@ import math
 from sklearn.metrics import mean_squared_error
 import statistics
 import influx
+import pandas as pd
+import matplotlib.pyplot as plt
 
 influx = influx.Influx()
+
+id = input("Enter ESP32 id: ")
 bucket = 'IoT-sensor'
 org = 'IoT'
-token = 'WOqKy-gIeRs9U-IlbEzZdLZcTZHpwPsx2NpibTGWbYFq_IuDZVEAcMZ1VtrYKnjFEjs2vsQJl6H2vvXvfClfPw=='
+#token = 'WOqKy-gIeRs9U-IlbEzZdLZcTZHpwPsx2NpibTGWbYFq_IuDZVEAcMZ1VtrYKnjFEjs2vsQJl6H2vvXvfClfPw=='
+
+token = '996mqBkUkAAnmEBU-l3WKyzl4AXfPVhdeGWPhIJBR79k6LNpeP1rRGqiWuw8dqzXbHZUL7H9wcHMLKu4auclyg=='
 # Store the URL of your InfluxDB instance
 url='http://localhost:8086'
 client = influxdb_client.InfluxDBClient(
@@ -29,7 +35,8 @@ query_api = client.query_api()
 global date
 
 
-def training(query):
+influx.delete_forecasting_prophet_all()
+def training(query,name_file):
     result = client.query_api().query(org=org, query=query)
 
     results = []
@@ -38,7 +45,7 @@ def training(query):
             results.append((record.get_time().strftime("%Y-%m-%d %H:%M:%S"), record.get_value()))
 
     df = pd.DataFrame (results, columns = ['ds', 'y'])
-    print (df)
+    #print (df)
 
     m = Prophet(interval_width=0.95)
     m.fit(df)
@@ -47,83 +54,125 @@ def training(query):
     future = m.make_future_dataframe(periods=p, freq='1 min')
     forecast = m.predict(future)
 
-    print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
+    #Graph maker
+    data = df['y'][:len(df)]
+    pred = forecast['yhat'][:len(df)]
+    date_time= forecast['ds'][:len(df)]
+    plt.clf()
+
+    plt.figure(figsize=(13,8))
+    DF = pd.DataFrame()
+    DF['yhat'] = data
+    DF['y'] = pred
+    DF = DF.set_index(date_time)
+    plt.plot(date_time,data)
+    plt.gcf().autofmt_xdate()
+
+    data = df['y'][:len(df)]
+    pred = forecast['yhat'][:len(df)]
+    date_time= forecast['ds'][:len(df)]
+
+    DF = pd.DataFrame()
+    DF['yhat'] = data
+    DF['y'] = pred
+    DF = DF.set_index(date_time)
+    plt.plot(date_time,pred)
+    plt.gcf().autofmt_xdate()
+
+    data = forecast['yhat'][-9:]
+    date_time= forecast['ds'][-9:]
+
+    DF = pd.DataFrame()
+    DF['yhat'] = data
+    DF = DF.set_index(date_time)
+    plt.plot(date_time,data)
+    plt.gcf().autofmt_xdate()
+    
+    fig1 = plt    
+    fig1.savefig(name_file)
+    #end graph maker
 
 
-    #fig1 = m.plot(forecast,uncertainty=True)
-    #fig1.savefig('books_read.pdf')
-    #fig1.show()
-
-
-    predicted = forecast['yhat'].iloc[:-p + 1].values
+    predicted = forecast['yhat'].iloc[:-p].values
     expected = df['y'].values
+    if(len(predicted)!=len(expected)):
+      predicted = forecast['yhat'].iloc[:-p+1].values
+    
 
 
         
     print('-'*40)
-    
     mse = mean_squared_error(expected, predicted)
     print(' MSE: %.3f'% mse)
-    
     rmse = math.sqrt(mean_squared_error(expected, predicted))
     print(' RMSE: %.3f'% rmse)
-        
     mean = statistics.mean(predicted)
     print(' Mean: %.3f' % mean)
-        
     stdev = statistics.stdev(predicted)
     print('Standard deviation:%.3f' % stdev)
-        
     print('-'*40)
 
-    print(forecast['yhat'].iloc[-p:])
+    #print(forecast['yhat'].iloc[-p:])
     
     date=forecast['ds'].iloc[-p:]
-    print(date.dt.strftime('%Y-%m-%dT%H:%M:%SZ'))
+    #print(date.dt.strftime('%Y-%m-%dT%H:%M:%SZ'))
 
     return forecast.iloc[-p:]
-    """
-    datetime_object = datetime.strptime(df.iloc[-1]['ds'], '%Y-%m-%d %H:%M:%S')
-    df_pred=[datetime_object + DateOffset(minutes=x)for x in range(1,11)]
-    
-    tm=pd.Series(df_pred).dt.strftime('%Y-%m-%dT%H:%M:%SZ')
-    """
 
 while True:
-  query_temperature = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-04T18:00:00Z)\
+  
+
+  a = 'from(bucket: "IoT-sensor")\
+    |> range(start: 2022-07-06T12:00:00Z , stop:2022-07-07T02:00:00Z)\
     |> filter(fn: (r) => r["_measurement"] == "sensor")\
     |> filter(fn: (r) => r["_field"] == "temperature")\
+    |> filter(fn: (r) => r["id"] == "'+id+'")\
     |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
 
-  query_humidity = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-04T18:00:00Z)\
-    |> filter(fn: (r) => r["_measurement"] == "sensor")\
-    |> filter(fn: (r) => r["_field"] == "humidity")\
-    |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
+  check_id=client.query_api().query(org=org, query=a)
+  
+  if not check_id:
+    print('ESP32 id not found')
+    break
+  else:
+    
+    query_temperature = 'from(bucket: "IoT-sensor")\
+      |> range(start: 2022-07-06T12:00:00Z , stop:2022-07-07T02:00:00Z)\
+      |> filter(fn: (r) => r["_measurement"] == "sensor")\
+      |> filter(fn: (r) => r["_field"] == "temperature")\
+      |> filter(fn: (r) => r["id"] == "'+id+'")\
+      |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
+    query_humidity = 'from(bucket: "IoT-sensor")\
+      |> range(start: 2022-07-06T12:00:00Z , stop:2022-07-07T02:00:00Z)\
+      |> filter(fn: (r) => r["_measurement"] == "sensor")\
+      |> filter(fn: (r) => r["_field"] == "humidity")\
+      |> filter(fn: (r) => r["id"] == "'+id+'")\
+      |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
 
-  query_gas = 'from(bucket: "IoT-sensor")\
-    |> range(start: 2022-07-04T18:00:00Z)\
-    |> filter(fn: (r) => r["_measurement"] == "sensor")\
-    |> filter(fn: (r) => r["_field"] == "gas")\
-    |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
+    query_gas = 'from(bucket: "IoT-sensor")\
+      |> range(start: 2022-07-06T12:00:00Z , stop:2022-07-07T02:00:00Z)\
+      |> filter(fn: (r) => r["_measurement"] == "sensor")\
+      |> filter(fn: (r) => r["_field"] == "gas")\
+      |> filter(fn: (r) => r["id"] == "'+id+'")\
+      |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)'
+    temperature="prophet_temperature.pdf"
+    humidity="prophet_humidity.pdf"
+    gas="prophet_gas.pdf"
+    model_temperature = training(query_temperature,temperature)
 
-  model_temperature = training(query_temperature)
+    model_humidity = training(query_humidity,humidity)
 
-  model_humidity = training(query_humidity)
+    model_gas = training(query_gas,gas)
 
-  model_gas = training(query_gas)
-
-  for i, item in enumerate(model_temperature['yhat']):
-      point_dict = dict({
-         'time': model_temperature['ds'].iloc[i].isoformat() + 'Z',
-         'fields': dict({
-               'temperature': model_temperature['yhat'].iloc[i],
-               'humidity': model_humidity['yhat'].iloc[i],
-               'gas': model_gas['yhat'].iloc[i]
-         })
-      })
-      print(point_dict)
-      influx.write_forecasting_prophet(point_dict)
+    for i, item in enumerate(model_temperature['yhat']):
+        point_dict = dict({
+          'time': model_temperature['ds'].iloc[i].isoformat() + 'Z',
+          'fields': dict({
+                'temperature': model_temperature['yhat'].iloc[i],
+                'humidity': model_humidity['yhat'].iloc[i],
+                'gas': model_gas['yhat'].iloc[i]
+          })
+        })
+        influx.write_forecasting_prophet(point_dict)
 
   sleep(60 - time() % 60)
