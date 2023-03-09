@@ -4,7 +4,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import pandas as pd
 
 org = 'IoT'
-token = '5XSTceUB8mbuFxUkS5RgqZiQ2nStsdyPiFSX5pbxBNxUS5COqT-t5bhxTxk7v6cDzvRMvH6P1a0ywgVIr31M_g=='
+token = 'WOqKy-gIeRs9U-IlbEzZdLZcTZHpwPsx2NpibTGWbYFq_IuDZVEAcMZ1VtrYKnjFEjs2vsQJl6H2vvXvfClfPw=='
 url='http://localhost:8086'
 
 client = influxdb_client.InfluxDBClient(
